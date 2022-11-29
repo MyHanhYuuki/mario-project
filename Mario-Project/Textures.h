@@ -11,6 +11,7 @@ using namespace std;
 */
 class CTextures
 {
+private:
 	static CTextures* __instance;
 
 	unordered_map<int, LPTEXTURE> textures;

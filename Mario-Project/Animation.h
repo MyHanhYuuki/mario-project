@@ -10,6 +10,7 @@ using namespace std;
 
 class CAnimation
 {
+private:
 	ULONGLONG lastFrameTime;
 	int defaultTime;
 	int currentFrame;

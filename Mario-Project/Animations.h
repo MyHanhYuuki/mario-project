@@ -5,6 +5,7 @@
 
 class CAnimations
 {
+private:
 	static CAnimations* __instance;
 
 	unordered_map<int, LPANIMATION> animations;

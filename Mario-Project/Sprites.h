@@ -14,6 +14,7 @@ using namespace std;
 */
 class CSprites
 {
+private:
 	static CSprites* __instance;
 
 	unordered_map<int, LPSPRITE> sprites;

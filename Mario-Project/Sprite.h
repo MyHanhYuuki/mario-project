@@ -5,6 +5,7 @@
 
 class CSprite
 {
+private:
 	int id;				// Sprite ID in the sprite database
 
 	int left;

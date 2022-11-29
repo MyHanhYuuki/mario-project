@@ -1,5 +1,6 @@
 #pragma once
-
+#include "Game.h"
+#include "Textures.h"
 #include "GameObject.h"
 
 /*
@@ -7,6 +8,7 @@
 */
 class CPortal : public CGameObject
 {
+private:
 	int scene_id;	// target scene to switch to 
 
 	float width;
@@ -17,7 +19,7 @@ public:
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
 
 	void RenderBoundingBox(void);
-	
+
 	int GetSceneId() { return scene_id;  }
 	int IsBlocking() { return 0; }
 };

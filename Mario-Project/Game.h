@@ -12,6 +12,7 @@ using namespace std;
 #include "Texture.h"
 #include "KeyEventHandler.h"
 #include "Scene.h"
+#include "debug.h"
 
 #define MAX_FRAME_RATE 100
 #define KEYBOARD_BUFFER_SIZE 1024
@@ -22,6 +23,7 @@ using namespace std;
 */
 class CGame
 {
+private:
 	static CGame* __instance;
 	HWND hWnd;									// Window handle
 

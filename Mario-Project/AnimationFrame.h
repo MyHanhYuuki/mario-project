@@ -7,6 +7,7 @@
 */
 class CAnimationFrame
 {
+private:
 	LPSPRITE sprite;
 	DWORD time;
 
