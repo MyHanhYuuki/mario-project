@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 //
 // This file contains all IDs of game assets 
@@ -7,6 +7,7 @@
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
+#define ID_TEX_IMAGEMAP 30
 
 
 #define OBJECT_TYPE_MARIO	0
@@ -15,6 +16,8 @@
 #define OBJECT_TYPE_KOOPAS	3
 #define OBJECT_TYPE_COIN 4
 #define OBJECT_TYPE_PLATFORM 5
+#define OBJECT_TYPE_IMAGEMAP 6
+#define OBJECT_TYPE_INVISIBLE_PLATFORM 8
 
 #define OBJECT_TYPE_PORTAL	50
 

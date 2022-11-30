@@ -12,7 +12,9 @@
 class CBrick : public CGameObject {
 public:
 	CBrick(float x, float y) : CGameObject(x, y) {}
-	void Render();
-	void Update(DWORD dt) {}
-	void GetBoundingBox(float& l, float& t, float& r, float& b);
+	void virtual Render();
+	void virtual Update(DWORD dt) {}
+	void virtual GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	void virtual SetState(int state);
 };
