@@ -13,7 +13,6 @@ void CInvisiblePlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + height;
 }
 
-
 void CInvisiblePlatform::Render()
 {
 	RenderBoundingBox();

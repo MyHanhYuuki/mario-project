@@ -20,8 +20,7 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 
-	CTileLayer* background;
-	CTileLayer* forgeground;
+	CMap* map;
 
 	// Chứa những cặp (id, game object) của những game object để liên kết với những game object khác,
 	// làm vậy để có thể kích hoạt các sự kiện, ví dụ như khi Mario va chạm ? brick từ bên dưới, thì lát nữa kích hoạt sự kiện Mushroom trồi lên
@@ -32,13 +31,13 @@ protected:
 	float old_base_platform_pos_y;
 
 	void _ParseSection_SPRITES(string line);
-	void _ParseSection_TILEMAP(string line);
+	void _ParseSection_MAP(string line);
 	void _ParseSection_ANIMATIONS(string line);
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
 
-	void LoadTilemap(string tilemapFile);
+	void LoadMap(string tilemapFile);
 	void LoadAssets(LPCWSTR assetFile);
 	
 public: 

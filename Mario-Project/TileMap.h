@@ -1,29 +1,44 @@
-#pragma once
+﻿#pragma once
+#include "GameObject.h"
 #include "TileLayer.h"
 #include "Utils.h"
 
 #define ID_FIRST_WORLD_MAP_1_1 70
 
-class CTileMap
+struct TileSet;
+
+class CMap
 {
 private:
-	int sprite_id_start;
+	int firstSpriteId;
 	vector<LPTILELAYER> layers;
 	string filePath;
+
+	CTileLayer* background;
+	CTileLayer* forgeground;
+
+	vector<LPGAMEOBJECT> objects;
+
+	void Load();
+	TileSet* LoadTileSet(TiXmlElement* root);
+	CTileLayer* LoadLayer(TiXmlElement* layerElement);
+	void registerTilesAndSprites(TileSet* root, CTileLayer* layer);
 public:
-	CTileMap();
-	CTileMap(string path);
+	CMap(string path);
 
-	vector<vector<int>> GetLayerInfo(TiXmlElement* layer_child);
-	void GetSpriteInfo(TiXmlElement* root, vector<vector<int>> grid);
-	void MakeLayers();
-
-	LPTILELAYER GetBackground() { return this->layers[0]; }
-	LPTILELAYER GetForgeground() { return this->layers[1]; }
-
-	void RenderBackground();
-	void RenderForgeground();
+	vector<LPGAMEOBJECT> getMapObject() { return this->objects; }
+	void Render(vector<LPGAMEOBJECT> objects);
 };
-typedef CTileMap LPTILEMAP;
+typedef CMap LPTILEMAP;
 
-
+struct TileSet
+{
+	int firstgid; // Có thể dùng để đại diện tileset (ID tileset)
+	int width;
+	int height;
+	int margin;
+	int spacing;
+	int tileCount;
+	int columns;
+	std::string textureID;
+};

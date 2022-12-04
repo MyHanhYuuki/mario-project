@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tileset version="1.9" tiledversion="1.9.2" name="world_1_1_transparent" tilewidth="16" tileheight="16" spacing="1" margin="1" tilecount="1533" columns="73">
+ <image source="../textures/world_1_1.png" width="1242" height="358"/>
+ <tile id="1322">
+  <animation>
+   <frame tileid="348" duration="100"/>
+   <frame tileid="349" duration="100"/>
+   <frame tileid="350" duration="100"/>
+  </animation>
+ </tile>
+</tileset>

@@ -15,12 +15,6 @@ height	240
 [TEXTURES]
 -100	textures\bbox.png
 0	textures\mario.png
-10	textures\enemies_transparent.png
+10	textures\enemies.png
 20	textures\misc.png
-30	textures\NES - Super Mario Bros 3 - Stage 1-1_No_items.png
-40	textures\SNES - Super Mario All-Stars Super Mario Bros 3 - Enemies_transparent.png
-50	textures\enemies_transparent.png
-60	textures\super_mario_bors_3_transparent.png
-70	textures\NES - Super Mario Bros 3 - Stage Tiles_transparent.png
-80	textures\UI_clean.png
-90	textures\SNES - Super Mario All-Stars Super Mario Bros 3 - Tileset and Objects_transparent.png
+70	textures\world_1_1.png

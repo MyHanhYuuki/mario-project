@@ -17,13 +17,11 @@ using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 {
-	player = NULL;
-	key_handler = new CSampleKeyHandler(this);
-	base_platform_pos_y = 0;
-	old_base_platform_pos_y = 0;
-
-	background = NULL;
-	forgeground = NULL;
+	this->player = NULL;
+	this->key_handler = new CSampleKeyHandler(this);
+	this->base_platform_pos_y = 0;
+	this->old_base_platform_pos_y = 0;
+	this->map = NULL;
 }
 
 #define SCENE_SECTION_UNKNOWN  -1
@@ -72,7 +70,7 @@ void CPlayScene::_ParseSection_ASSETS(string line)
 }
 
 
-void CPlayScene::_ParseSection_TILEMAP(string line)
+void CPlayScene::_ParseSection_MAP(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -80,15 +78,18 @@ void CPlayScene::_ParseSection_TILEMAP(string line)
 
 	string path = tokens[0];
 
-	LoadTilemap(path);
+	LoadMap(path);
 }
 
-void CPlayScene::LoadTilemap(string tilemapFile)
+void CPlayScene::LoadMap(string tilemapFile)
 {
 
-	CTileMap* tile_map = new CTileMap(tilemapFile);
-	this->background = tile_map->GetBackground();
-	this->forgeground = tile_map->GetForgeground();
+	this->map = new CMap(tilemapFile);
+
+	vector<LPGAMEOBJECT> mapObject = this->map->getMapObject();
+	for (int i = 0; i < mapObject.size(); i++) {
+		this->objects.push_back(mapObject[i]);
+	}
 
 	DebugOut(L"[Info][PlayScene] Load tile map information\n");
 }
@@ -278,7 +279,7 @@ void CPlayScene::Load()
 		switch (section)
 		{
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
-			case SCENE_SECTION_TILEMAP: _ParseSection_TILEMAP(line); break;
+			case SCENE_SECTION_TILEMAP: _ParseSection_MAP(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 		}
 	}
@@ -336,6 +337,9 @@ void CPlayScene::MakeCameraFollowMario()
 
 			cy += BASE_PLATFORM_HEIGHT;
 
+			// Set offset from HUD height
+			//cy += 40;
+
 			cy -= game->GetBackBufferHeight();
 		}
 			
@@ -349,15 +353,7 @@ void CPlayScene::MakeCameraFollowMario()
 
 void CPlayScene::Render()
 {
-	if (this->background != NULL)
-		this->background->Render();
-
-	// Vẽ theo chiều ngược lại vì Mario thuộc vị trí đầu tiên của objects, theo sau là các object và cuối cùng là map
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
-
-	if (this->forgeground != NULL)
-		this->forgeground->Render();
+	this->map->Render(this->objects);
 }
 
 /*

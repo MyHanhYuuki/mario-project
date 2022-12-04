@@ -5,7 +5,7 @@ brick.txt
 platform.txt
 
 [TILEMAP]
-scenes\Scenes_1-1.tmx
+scenes\world_1_1.tmx
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -17,56 +17,15 @@ scenes\Scenes_1-1.tmx
 
 #Platform
 # Extra info: is_base_platform, is_first_base_platform, is_hidden_zone_platform
-# 1st ground (lower)
-5	10	424	16	16	45	55100	55200	55300	1	0
-# 2nd ground (higher)
-5	720	400	16	16	23	55100	55200	55300
-# 3rd ground (lower)
-5	1120	416	16	16	23	55100	55200	55300
-# 4th ground (lower, short)
-5	1520	416	16	16	5	55100	55200	55300
-# 5th ground (
-5	1648	416	16	16	39	55100	55200	55300
-# 6th ground (lower, the last one of this scene)
-5	2304	416	16	16	42	55100	55200	55300
 
-# 7th ground (underground)
+# ground
+5	8	424	16	16	45	55100	55200	55300	1	0
+5	728	408	16	16	23	55100	55200	55300
+5	728	424	16	16	23	55400	55500	55600
+5	1128	424	16	16	23	55100	55200	55300
+5	1528	424	16	16	5	55100	55200	55300
+5	1656	424	16	16	39	55100	55200	55300
+5	2312	424	16	16	42	55100	55200	55300
+
+# underground
 5	2079	657	16	16	10	20001	20001	20001	1	1
-
-# Invisible platform (Big rectangle platform)
-# 1st ground
-# 1st (Pink)
-8	240	368	48	8
-# 2nd (Blue)
-8	272	336	48	8
-
-# 3rd (Green)
-8	448	368	112	8
-# 4th (Pink)
-8	528	336	96	8
-# 5th (Green)
-8	608	384	96	8
-# 6th (White)
-8	608	288	64	8
-
-# 3rd ground
-# 7th (Green)
-8	1216	384	112	8
-# 8th (Pink)
-8	1248	352	112	8
-# 9th (Blue)
-8	1280	320	112	8
-
-# 5th ground
-# 10th (Pink)
-8	2176	368	48	8
-# 11th (Green)
-8	2208	272	48	8
-
-# Above
-# 12th (Pink)
-8	1248	112	64	8
-# 13th (1st square cloud)
-8	1344	176	64	8
-# 14th (2nd square cloud)
-8	1424	160	192	8

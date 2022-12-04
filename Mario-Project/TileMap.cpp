@@ -1,25 +1,21 @@
 ﻿#include "TileMap.h"
 #include "Textures.h"
+#include "InvisiblePlatform.h"
+#include "AssetIDs.h"
 
-CTileMap::CTileMap()
-{ 
-	this->sprite_id_start = SPRITE_ID_START_TILEMAP; 
-}
-
-CTileMap::CTileMap(string path)
+CMap::CMap(string path)
 { 
 	this->filePath = path; 
-	this->sprite_id_start = SPRITE_ID_START_TILEMAP; 
+	this->firstSpriteId = SPRITE_ID_START_TILEMAP;
+	this->background = NULL;
+	this->forgeground = NULL;
 	
-	// Extract and register sprite info from tile map
-	MakeLayers();
-
-	DebugOut(L"[info][TileMap] Load %d player(s) from %s \n", this->layers.size());
+	// load map
+	Load();
 }
 
-void CTileMap::MakeLayers()
+void CMap::Load()
 {
-	// Load xml file 
 	TiXmlDocument doc(this->filePath.c_str());
 	if (!doc.LoadFile())
 	{
@@ -27,30 +23,104 @@ void CTileMap::MakeLayers()
 		return;
 	}
 
-	// Lay thong tin node goc
 	TiXmlElement* root = doc.RootElement();
 
-	for (auto layer = root->FirstChildElement("layer"); layer != NULL; layer = layer->NextSiblingElement("layer"))
+	// Load tileset
+	TileSet* tileSet = this->LoadTileSet(root);
+	if (tileSet == NULL) {
+		DebugOut(L"[ERROR] fail to load tile set");
+		return;
+	}
+
+	// Load layer
+	for (auto element = root->FirstChildElement("layer"); element != NULL; element = element->NextSiblingElement("layer"))
 	{
-		// Lấy tọa độ những chỗ cần vẽ trên map
-		vector<vector<int>> grid = GetLayerInfo(layer);
+		// Load map info
+		CTileLayer* layer = LoadLayer(element);
+		if (layer != NULL) {
+			string name = element->Attribute("name");
 
+			// Hiện tile map chỉ có 2 layer
+			if (name == "Background") {
+				this->background = layer;
+			}
+			else if (name == "Foreground") {
+				this->forgeground = layer;
+			}
+			else {
+				this->layers.push_back(layer);
+			}
 
-		//Lấy tọa độ của các sprite cần vẽ
-		GetSpriteInfo(root, grid);
+			//Lấy tọa độ của các sprite cần vẽ
+			registerTilesAndSprites(tileSet, layer);
+		}
+	}
+
+	// Load object group
+	for (auto element = root->FirstChildElement("objectgroup"); element != NULL; element = element->NextSiblingElement("objectgroup")) {
+		string name = element->Attribute("name");
+		int objectGroupdID;
+		element->QueryIntAttribute("id", &objectGroupdID);
+
+		if (name != "Solid") continue;
+		CGameObject* gameObject = NULL;
+		for (TiXmlElement* object = element->FirstChildElement("object"); object != nullptr; object = object->NextSiblingElement("object"))
+		{
+			int id, x, y, width, height;
+			int type = 0;
+			int cellX = -1, cellY = -1;
+			object->QueryIntAttribute("id", &id);
+			object->QueryIntAttribute("x", &x);
+			object->QueryIntAttribute("y", &y);
+			object->QueryIntAttribute("width", &width);
+			object->QueryIntAttribute("height", &height);
+
+			gameObject = new CInvisiblePlatform(x, y, OBJECT_TYPE_INVISIBLE_PLATFORM, width, height);
+			this->objects.push_back(gameObject);
+		}
 	}
 }
 
+TileSet* CMap::LoadTileSet(TiXmlElement* root)
+{
+	// Lấy tên file tileset để mở file đó và lấy các thông tin cần thiết
+	TiXmlElement* element = root->FirstChildElement("tileset");
+	string imageSourcePath = element->Attribute("source");
+
+	TiXmlDocument imageRootNode(("scenes//" + imageSourcePath).c_str());
+	if (imageRootNode.LoadFile())
+	{
+		TiXmlElement* tileSetElement = imageRootNode.RootElement();
+
+		TileSet* tileSet = new TileSet();
+		tileSetElement->QueryIntAttribute("spacing", &tileSet->spacing);
+		tileSetElement->QueryIntAttribute("margin", &tileSet->margin);
+		tileSetElement->QueryIntAttribute("tilewidth", &tileSet->width);
+		tileSetElement->QueryIntAttribute("tileheight", &tileSet->height);
+		tileSetElement->QueryIntAttribute("columns", &tileSet->columns);
+
+		return tileSet;
+	}
+
+	return NULL;
+}
 
 // Load tag data của layer để điền vào grid 2D [width, height]
-vector<vector<int>> CTileMap::GetLayerInfo(TiXmlElement* layer_child)
+CTileLayer* CMap::LoadLayer(TiXmlElement* layerElement)
 {
-	int numCellWidth, numCellHeight;
-	layer_child->QueryIntAttribute("width", &numCellWidth);
-	layer_child->QueryIntAttribute("height", &numCellHeight);
+	int visible;
+	layerElement->QueryIntAttribute("visible", &visible);
+	if (visible == 0) {
+		return NULL;
+	}
 
-	string content = layer_child->FirstChildElement("data")->GetText();
-	vector<string> num_tokens = Split(content, ",");
+	int colCount, rowCount;
+	layerElement->QueryIntAttribute("width", &colCount);
+	layerElement->QueryIntAttribute("height", &rowCount);
+	CTileLayer* layer = new CTileLayer(colCount, rowCount);
+
+	string strTile = layerElement->FirstChildElement("data")->GetText();
+	vector<string> tiles = split(strTile, ",");
 
 	// Vị trí thứ i của num_tokens sẽ là ô có sprite
 	// Giá trị tại vị trí i:
@@ -58,53 +128,42 @@ vector<vector<int>> CTileMap::GetLayerInfo(TiXmlElement* layer_child)
 	// Khác 0: ô này có sprite, giá trị này là số thứ tự (bắt đầu từ 1, ko phải 0) của sprite trong ảnh texture
 
 	// Điền vào grid theo trình tự: trái -> phải, trên -> dưới
-	vector<vector<int>> grid(numCellWidth, vector<int>(numCellHeight));
-	for (int i = 0; i < numCellWidth; i++)
+	vector<vector<int>> tileIDs(colCount, vector<int>(rowCount));
+	for (int col = 0; col < colCount; col++)
 	{
-		for (int j = 0; j < numCellHeight; j++)
+		for (int row = 0; row < rowCount; row++)
 		{
-			grid[i][j] = stoi(num_tokens[int(i + (j * numCellWidth))]);
+			tileIDs[col][row] = stoi(tiles[int(col + (row * colCount))]);
 		}
 	}
-	return grid;
+	layer->tileIDs = tileIDs;
+
+	// clear data
+	tiles.clear();
+
+	return layer;
 }
 
-
-void CTileMap::GetSpriteInfo(TiXmlElement* root, vector<vector<int>> grid)
+void CMap::registerTilesAndSprites(TileSet* tileSet, CTileLayer* layer)
 {
-	// Lấy tên file tileset để mở file đó và lấy các thông tin cần thiết
-	TiXmlElement* tileset_layer = root->FirstChildElement("tileset");
-	string img_tileset_path = tileset_layer->Attribute("source");
-
-	TiXmlDocument doc_img(("scenes//" + img_tileset_path).c_str());
-	if (!doc_img.LoadFile())
-	{
-		printf("%s", doc_img.ErrorDesc());
-		return;
-	}
-
-	TiXmlElement* tile_set_ele = doc_img.RootElement();
-	int spacing, margin, tileWidth, tileHeight, column;
-	tile_set_ele->QueryIntAttribute("spacing", &spacing);
-	tile_set_ele->QueryIntAttribute("margin", &margin);
-	tile_set_ele->QueryIntAttribute("tilewidth", &tileWidth);
-	tile_set_ele->QueryIntAttribute("tileheight", &tileHeight);
-	tile_set_ele->QueryIntAttribute("columns", &column);
-
+	int spacing = tileSet->spacing
+		, margin = tileSet->margin
+		, tileWidth = tileSet->width
+		, tileHeight = tileSet->height
+		, column = tileSet->columns;
 
 	CSprites* sprites = CSprites::GetInstance();
 	LPTEXTURE texMap = CTextures::GetInstance()->Get(ID_FIRST_WORLD_MAP_1_1);
 
-	int width = grid.size();
-	int height = grid[0].size();
-	LPTILELAYER tile_layer = new CTileLayer();
+	auto posTable = layer->tileIDs;
+	int width = posTable.size();
+	int height = posTable[0].size();
 
-	// Duyệt từ trái -> phải, trên -> dưới để có thể dễ dàng debug (vì ta đã biết rõ thứ tự của các sprite trong layer)
 	for (int j = 0; j < height; j++)
 	{
 		for (int i = 0; i < width; i++)
 		{
-			int sprite_ith = grid[i][j];	// Vị trí của sprite (ith) trong ảnh texture bắt đầu từ số 1, ko phải số 0
+			int sprite_ith = posTable[i][j];	// Vị trí của sprite (ith) trong ảnh texture bắt đầu từ số 1, ko phải số 0
 			if (sprite_ith != 0)	// Khác 0 tức là vị trí này có sprite
 			{
 				int x_th, y_th; // Bắt đầu từ số 0
@@ -123,28 +182,37 @@ void CTileMap::GetSpriteInfo(TiXmlElement* root, vector<vector<int>> grid)
 				int top = margin + y_th * (tileHeight + spacing);
 				int right = left + tileWidth - 1;
 				int bottom = top + tileHeight - 1;
+
 				// Thêm sprite vào database
-				sprites->Add(this->sprite_id_start, left, top, right, bottom, texMap);
+				sprites->Add(this->firstSpriteId, left, top, right, bottom, texMap);
 
 				// Thêm sprite vào layer
-				LPTILE tile = new CTile(i, j, tileWidth, tileHeight, this->sprite_id_start);
-				tile_layer->AddTile(tile);
+				LPTILE tile = new CTile(i, j, tileWidth, tileHeight, this->firstSpriteId);
+				layer->AddTile(tile);
 
-				this->sprite_id_start++;
+				this->firstSpriteId++;
 			}
 		}
 	}
-	this->layers.push_back(tile_layer);
 }
 
-void CTileMap::RenderBackground()
-{
-	CSprites* sprites = CSprites::GetInstance();
-	this->layers[0]->Render();
-}
 
-void CTileMap::RenderForgeground()
-{
-	CSprites* sprites = CSprites::GetInstance();
-	this->layers[1]->Render();
+void CMap::Render(vector<LPGAMEOBJECT> objects) {
+
+	if (this->background != NULL)
+		this->background->Render();
+
+	for (int i = 0; i < layers.size(); i++) {
+		layers[i]->Render();
+	}
+
+	// Vẽ theo chiều ngược lại vì Mario thuộc vị trí đầu tiên của objects, theo sau là các object và cuối cùng là map
+	for (int i = 0; i < objects.size(); i++)
+		objects[i]->Render();
+
+	for (int i = 0; i < this->objects.size(); i++)
+		this->objects[i]->Render();
+
+	if (this->forgeground != NULL)
+		this->forgeground->Render();
 }
