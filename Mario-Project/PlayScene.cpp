@@ -311,7 +311,11 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 
-	MakeCameraFollowMario();
+	// Only update when mario is alive
+	if (player->GetState() != MARIO_STATE_DIE)
+	{
+		MakeCameraFollowMario();
+	}
 
 	PurgeDeletedObjects();
 }

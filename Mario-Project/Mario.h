@@ -8,9 +8,13 @@
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
+#define MARIO_RUNNING_MAX_SPEED		0.4f
 
-#define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_WALK_X	0.0002f
+#define MARIO_ACCEL_RUN_X	0.0003f
+#define MARIO_ACCEL_MAX_RUN_X	0.0005f
+#define MARIO_ACCEL_TIME	1500
+#define MARIO_SPEED_DOWN_TIME	1000
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
@@ -32,7 +36,6 @@
 
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
-
 
 #pragma region ANIMATION_ID
 
@@ -82,9 +85,6 @@
 
 #define GROUND_Y 160.0f
 
-
-
-
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 
@@ -103,13 +103,18 @@
 
 class CMario : public CGameObject
 {
+private:
 	BOOLEAN isSitting;
+	BOOLEAN isRunning;
 	float maxVx;
-	float ax;				// acceleration on x 
-	float ay;				// acceleration on y 
+	float ax;				// acceleration on x
+	float ay;				// acceleration on y
+	float fSpeedDownAccel;
+	unsigned int iSpeedDownTick;
 
 	int level; 
 	int untouchable; 
+	ULONGLONG running_start;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
 	int coin;
@@ -126,16 +131,23 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		state = MARIO_STATE_IDLE;
 		isSitting = false;
+		isRunning = false;
+		running_start = 0;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
+		fSpeedDownAccel = 0;
+		iSpeedDownTick = 100;
 
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+
+		isStopUpdate = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
