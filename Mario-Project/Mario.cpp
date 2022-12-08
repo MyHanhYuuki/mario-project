@@ -8,13 +8,14 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "InvisiblePlatform.h"
+#include "Mushroom.h"
 
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	
-if (isRunning) {
+	if (isRunning) {
 		if (running_start == 0) {
 			running_start = GetTickCount64();
 		} else if (GetTickCount64() - running_start >= MARIO_ACCEL_TIME) {
@@ -83,6 +84,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -128,6 +131,11 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+}
+
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	this->SetLevel(MARIO_LEVEL_BIG);
 }
 
 //

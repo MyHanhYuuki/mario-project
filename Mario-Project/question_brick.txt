@@ -1,0 +1,19 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# question mark moving
+20101	300	117	315	132	20
+20102	318	117	333	132	20
+20103	336	117	351	132	20
+20104	354	117	369	132	20
+
+# no question mark moving
+20151	372	117	387	132	20
+
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+# question mark mark moving
+10100	20101	300	20102	300	20103	300	20104	300
+
+# no question mark mark moving
+10150	20151	300

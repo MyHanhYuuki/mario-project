@@ -2,7 +2,9 @@
 [ASSETS]
 mario.txt
 brick.txt
+question_brick.txt
 platform.txt
+mushroom.txt
 
 [TILEMAP]
 scenes\world_1_1.tmx
@@ -29,3 +31,6 @@ scenes\world_1_1.tmx
 
 # underground
 5	2079	657	16	16	10	20001	20001	20001	1	1
+
+# Question brick
+7	240	350	1

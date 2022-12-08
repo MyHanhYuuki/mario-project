@@ -10,6 +10,7 @@
 #include "Coin.h"
 #include "Platform.h"
 #include "InvisiblePlatform.h"
+#include "QuestionBrick.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -184,6 +185,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				DebugOut(L"Loaded HZ base platform\n");
 			}
 		}
+		break;
+	}
+	case OBJECT_TYPE_QUESTION_BRICK:
+	{
+		bool isContainsItem = tokens.size() > 3;
+		obj = new CQuestionBrick(x, y, isContainsItem);
 		break;
 	}
 	case OBJECT_TYPE_INVISIBLE_PLATFORM:

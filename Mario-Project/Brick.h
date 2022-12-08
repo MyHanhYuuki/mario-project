@@ -17,4 +17,7 @@ public:
 	void virtual GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	void virtual SetState(int state);
+
+	virtual void OnNoCollision(DWORD dt) {};
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {};
 };
