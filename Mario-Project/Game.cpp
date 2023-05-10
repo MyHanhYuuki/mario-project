@@ -48,7 +48,7 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 
 	// Create the D3D device and the swap chain
 	HRESULT hr = D3D10CreateDeviceAndSwapChain(NULL,
-		D3D10_DRIVER_TYPE_REFERENCE,
+		D3D10_DRIVER_TYPE_HARDWARE,
 		NULL,
 		0,
 		D3D10_SDK_VERSION,
@@ -98,7 +98,7 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	//
 	//
 
-	D3D10_SAMPLER_DESC desc; 
+	D3D10_SAMPLER_DESC desc;
 	desc.Filter = D3D10_FILTER_MIN_MAG_POINT_MIP_LINEAR;
 	desc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
 	desc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
