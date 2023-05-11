@@ -58,17 +58,17 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
 }
 
+#define ASSETS_FOLDER "assets\\"
 void CPlayScene::_ParseSection_ASSETS(string line)
 {
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 1) return;
 
-	wstring path = ToWSTR(tokens[0]);
+	wstring path = ToWSTR(ASSETS_FOLDER) + ToWSTR(tokens[0]);
 
 	LoadAssets(path.c_str());
 }
-
 
 void CPlayScene::_ParseSection_MAP(string line)
 {

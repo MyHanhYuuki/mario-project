@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "TileLayer.h"
 #include "Utils.h"
+#include "Goomba.h"
 
 #define ID_FIRST_WORLD_MAP_1_1 70
 

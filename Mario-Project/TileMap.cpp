@@ -62,22 +62,45 @@ void CMap::Load()
 		int objectGroupdID;
 		element->QueryIntAttribute("id", &objectGroupdID);
 
-		if (name != "Solid") continue;
-		CGameObject* gameObject = NULL;
-		for (TiXmlElement* object = element->FirstChildElement("object"); object != nullptr; object = object->NextSiblingElement("object"))
-		{
-			int id, x, y, width, height;
-			int type = 0;
-			int cellX = -1, cellY = -1;
-			object->QueryIntAttribute("id", &id);
-			object->QueryIntAttribute("x", &x);
-			object->QueryIntAttribute("y", &y);
-			object->QueryIntAttribute("width", &width);
-			object->QueryIntAttribute("height", &height);
+		if (name == "Platform") {
+			CGameObject* gameObject = NULL;
+			for (TiXmlElement* object = element->FirstChildElement("object"); object != nullptr; object = object->NextSiblingElement("object"))
+			{
+				int id, x, y, width, height;
+				int type = 0;
+				int cellX = -1, cellY = -1;
+				object->QueryIntAttribute("id", &id);
+				object->QueryIntAttribute("x", &x);
+				object->QueryIntAttribute("y", &y);
+				object->QueryIntAttribute("width", &width);
+				object->QueryIntAttribute("height", &height);
 
-			gameObject = new CInvisiblePlatform(x, y, OBJECT_TYPE_INVISIBLE_PLATFORM, width, height);
-			this->objects.push_back(gameObject);
+				gameObject = new CInvisiblePlatform(x, y, OBJECT_TYPE_INVISIBLE_PLATFORM, width, height);
+				this->objects.push_back(gameObject);
+			}
+		} else if (name == "Enemy") {
+			CGameObject* gameObject = NULL;
+			for (TiXmlElement* object = element->FirstChildElement("object"); object != nullptr; object = object->NextSiblingElement("object"))
+			{
+				int id, x, y, width, height;
+				int type = 0;
+				int cellX = -1, cellY = -1;
+				string name;
+				object->QueryIntAttribute("id", &id);
+				name = object->Attribute("name");
+				object->QueryIntAttribute("x", &x);
+				object->QueryIntAttribute("y", &y);
+				object->QueryIntAttribute("width", &width);
+				object->QueryIntAttribute("height", &height);
+
+				if (name == "Goomba") {
+					gameObject = new CGoomba(x, y);
+				}
+
+				this->objects.push_back(gameObject);
+			}
 		}
+
 	}
 }
 
