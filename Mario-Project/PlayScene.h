@@ -1,4 +1,5 @@
 #pragma once
+#include "tinyxml.h"
 #include "Game.h"
 #include "Textures.h"
 #include "Scene.h"
@@ -6,11 +7,23 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
-#include "TileMap.h"
+#include "Tile.h"
 //#include "Koopas.h"
 
 #define DEFAULT_ID_HIDDEN_ZONE_BASE_PLATFORM 720
 #define BASE_PLATFORM_HEIGHT 16
+
+struct TileSet
+{
+	int firstgid; // Có thể dùng để đại diện tileset (ID tileset)
+	int width;
+	int height;
+	int margin;
+	int spacing;
+	int tileCount;
+	int columns;
+	std::string textureID;
+};
 
 class CPlayScene: public CScene
 {
@@ -19,8 +32,7 @@ protected:
 	LPGAMEOBJECT player;					
 
 	vector<LPGAMEOBJECT> objects;
-
-	CMap* map;
+	vector<LPTILE> tiles;
 
 	// Chứa những cặp (id, game object) của những game object để liên kết với những game object khác,
 	// làm vậy để có thể kích hoạt các sự kiện, ví dụ như khi Mario va chạm ? brick từ bên dưới, thì lát nữa kích hoạt sự kiện Mushroom trồi lên
@@ -33,13 +45,13 @@ protected:
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_MAP(string line);
 	void _ParseSection_ANIMATIONS(string line);
-
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
 
 	void LoadMap(string tilemapFile);
 	void LoadAssets(LPCWSTR assetFile);
-	
+	TileSet* LoadTileSet(TiXmlElement* root);
+	void ParseTile(TiXmlElement* layerElement);
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
 
@@ -64,4 +76,3 @@ public:
 };
 
 typedef CPlayScene* LPPLAYSCENE;
-

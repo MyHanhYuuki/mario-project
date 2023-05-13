@@ -105,9 +105,6 @@
     <ClInclude Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TileLayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="InvisiblePlatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
