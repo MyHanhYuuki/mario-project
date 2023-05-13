@@ -27,6 +27,7 @@ struct TileSet
 
 class CPlayScene: public CScene
 {
+	int worldWidth;
 protected: 
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;					

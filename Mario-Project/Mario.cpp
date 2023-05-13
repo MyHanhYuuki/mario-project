@@ -39,14 +39,19 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (e->ny != 0 && e->obj->IsBlocking())
-	{
-		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
-	}
-	else if (e->nx != 0 && e->obj->IsBlocking())
-	{
-		vx = 0;
+	if (e->obj->IsBlocking() || e->obj->GetBlockDirection() == BLOCK_ALL) {
+		if (e->ny != 0) {
+			vy = 0;
+			if (e->ny < 0) isOnPlatform = true;
+		}
+		else if (e->nx != 0) {
+			vx = 0;
+		}
+	} else if (e->obj->GetBlockDirection() == BLOCK_TOP) {
+		if (e->ny < 0) {
+			isOnPlatform = true;
+			vy = 0;
+		}
 	}
 
 	if (dynamic_cast<CGoomba*>(e->obj))

@@ -16,13 +16,3 @@ scenes\world_1_1.tmx
 
 # MARIO
 0	240	369
-
-#Platform
-# Extra info: is_base_platform, is_first_base_platform, is_hidden_zone_platform
-
-# ground
-5	8	424	16	16	45	55100	55200	55300	1	0
-
-
-# underground
-5	2079	657	16	16	10	20001	20001	20001	1	1

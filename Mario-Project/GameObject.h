@@ -8,11 +8,12 @@
 #include "Animations.h"
 #include "Sprites.h"
 #include "Collision.h"
+#include "AssetIDs.h"
 
 using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
-#define BBOX_ALPHA 0.25f		// Bounding box transparency
+#define BBOX_ALPHA 0.1f		// Bounding box transparency
 
 class CGameObject
 {
@@ -30,6 +31,8 @@ protected:
 
 	bool isDeleted; 
 
+	int blockDirection;
+
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
@@ -43,7 +46,7 @@ public:
 	void RenderBoundingBox();
 
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
+	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; this->blockDirection = BLOCK_ALL; }
 
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
@@ -64,6 +67,8 @@ public:
 	
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return 1; }
+	void SetBlockDirection(int blockDirection) { this->blockDirection = blockDirection; }
+	int GetBlockDirection() { return this->blockDirection; }
 
 	~CGameObject();
 

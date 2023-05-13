@@ -11,7 +11,7 @@
 #include "Platform.h"
 #include "InvisiblePlatform.h"
 #include "SampleKeyEventHandler.h"
-#include "tinyxml.h""
+#include "tinyxml.h"
 
 using namespace std;
 
@@ -21,6 +21,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 	this->key_handler = new CSampleKeyHandler(this);
 	this->base_platform_pos_y = 0;
 	this->old_base_platform_pos_y = 0;
+	this->worldWidth = 0;
 }
 
 #define SCENE_SECTION_UNKNOWN  -1
@@ -78,70 +79,6 @@ void CPlayScene::_ParseSection_MAP(string line)
 	string path = tokens[0];
 
 	LoadMap(path);
-}
-
-void CPlayScene::LoadMap(string filePath)
-{
-	TiXmlDocument doc(filePath.c_str());
-	if (!doc.LoadFile())
-	{
-		printf("%s", doc.ErrorDesc());
-		return;
-	}
-
-	// Parse tile object
-	auto root = doc.RootElement();
-	ParseTile(doc.RootElement());
-
-	// Load object group
-	for (auto element = root->FirstChildElement("objectgroup"); element != NULL; element = element->NextSiblingElement("objectgroup")) {
-		string name = element->Attribute("name");
-		int objectGroupdID;
-		element->QueryIntAttribute("id", &objectGroupdID);
-
-		if (name == "Platform") {
-			CGameObject* gameObject = NULL;
-			for (TiXmlElement* object = element->FirstChildElement("object"); object != nullptr; object = object->NextSiblingElement("object"))
-			{
-				int id, x, y, width, height;
-				int type = 0;
-				int cellX = -1, cellY = -1;
-				object->QueryIntAttribute("id", &id);
-				object->QueryIntAttribute("x", &x);
-				object->QueryIntAttribute("y", &y);
-				object->QueryIntAttribute("width", &width);
-				object->QueryIntAttribute("height", &height);
-
-				gameObject = new CInvisiblePlatform(x, y, OBJECT_TYPE_INVISIBLE_PLATFORM, width, height);
-				this->objects.push_back(gameObject);
-			}
-		}
-		else if (name == "GameObject") {
-			CGameObject* gameObject = NULL;
-			for (TiXmlElement* object = element->FirstChildElement("object"); object != nullptr; object = object->NextSiblingElement("object"))
-			{
-				int id, x, y, width, height;
-				int type = 0;
-				int cellX = -1, cellY = -1;
-				string name;
-				object->QueryIntAttribute("id", &id);
-				name = object->Attribute("name");
-				object->QueryIntAttribute("x", &x);
-				object->QueryIntAttribute("y", &y);
-				object->QueryIntAttribute("width", &width);
-				object->QueryIntAttribute("height", &height);
-
-				if (name == "Goomba") {
-					gameObject = new CGoomba(x, y);
-				}
-				else if (name == "Coin") {
-					gameObject = new CCoin(x, y);
-				}
-
-				this->objects.push_back(gameObject);
-			}
-		}
-	}
 }
 
 void CPlayScene::_ParseSection_ANIMATIONS(string line)
@@ -338,6 +275,92 @@ void CPlayScene::Load()
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
+void CPlayScene::LoadMap(string filePath)
+{
+	TiXmlDocument doc(filePath.c_str());
+	if (!doc.LoadFile())
+	{
+		printf("%s", doc.ErrorDesc());
+		return;
+	}
+
+	// Parse tile object
+	auto root = doc.RootElement();
+	ParseTile(doc.RootElement());
+
+	// Load map property
+	root->QueryIntAttribute("width", &worldWidth);
+
+	// Load object group
+	for (auto element = root->FirstChildElement("objectgroup"); element != NULL; element = element->NextSiblingElement("objectgroup")) {
+		for (TiXmlElement* object = element->FirstChildElement("object"); object != nullptr; object = object->NextSiblingElement("object"))
+		{
+			CGameObject* gameObject = NULL;
+
+			float x, y;
+			int id, width, height;
+			int type = 0;
+			int cellX = -1, cellY = -1;
+			string name;
+			name = object->Attribute("name");
+			object->QueryIntAttribute("id", &id);
+			object->QueryFloatAttribute("x", &x);
+			object->QueryFloatAttribute("y", &y);
+			object->QueryIntAttribute("width", &width);
+			object->QueryIntAttribute("height", &height);
+
+			// Skip invisible object
+			if (object->Attribute("visible")) {
+				DebugOut(L"%s is invisible\n", ToLPCWSTR(name));
+				continue;
+			}
+
+			// Parse Platform and it's derived class
+			if ((int)name.rfind("Platform") >= 0 || name == "pipe") {
+				gameObject = new CInvisiblePlatform(x, y, OBJECT_TYPE_INVISIBLE_PLATFORM, width, height);
+
+				if ((int)name.rfind("Top") >= 0) {
+					gameObject->SetBlockDirection(BLOCK_TOP);
+				}
+			} else if (name == "Goomba") {
+					gameObject = new CGoomba(x, y);
+			} else if (name == "Coin") {
+				gameObject = new CCoin(x, y);
+			}
+			
+			if (gameObject) {
+				this->objects.push_back(gameObject);
+			}
+
+			DebugOut(L"Load %s object is %s\n", ToLPCWSTR(name), (gameObject ? L"succeeded" : L"fail"));
+		}
+	}
+}
+
+TileSet* CPlayScene::LoadTileSet(TiXmlElement* root)
+{
+	// Lấy tên file tileset để mở file đó và lấy các thông tin cần thiết
+	TiXmlElement* element = root->FirstChildElement("tileset");
+	string imageSourcePath = element->Attribute("source");
+
+	TiXmlDocument imageRootNode(("scenes//" + imageSourcePath).c_str());
+	if (imageRootNode.LoadFile())
+	{
+		TiXmlElement* tileSetElement = imageRootNode.RootElement();
+
+		TileSet* tileSet = new TileSet();
+		tileSetElement->QueryIntAttribute("spacing", &tileSet->spacing);
+		tileSetElement->QueryIntAttribute("margin", &tileSet->margin);
+		tileSetElement->QueryIntAttribute("tilewidth", &tileSet->width);
+		tileSetElement->QueryIntAttribute("tileheight", &tileSet->height);
+		tileSetElement->QueryIntAttribute("columns", &tileSet->columns);
+
+		return tileSet;
+	}
+
+	return NULL;
+}
+
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
@@ -372,32 +395,28 @@ void CPlayScene::MakeCameraFollowMario()
 
 	// Update camera to follow mario
 	float cx, cy;
-	player->GetPosition(cx, cy);
 
+	// Get current mario
 	CGame* game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	// cy -= game->GetBackBufferHeight() / 2;
+	game->GetCamPos(cx, cy);
 
-
-	if (this->base_platform_pos_y != 0)
-	{
-		if (((this->base_platform_pos_y - game->GetBackBufferHeight()) <= cy) && (cy <= this->base_platform_pos_y)) {
-			cy = base_platform_pos_y;
-
-			cy += BASE_PLATFORM_HEIGHT;
-
-			// Set offset from HUD height
-			//cy += 40;
-
-			cy -= game->GetBackBufferHeight();
-		}
-			
+	// Adjust camera base on mario position
+	// whenever mario is alive
+	if (player->GetState() != MARIO_STATE_DIE) {
+		player->GetPosition(cx, cy);
+		cx -= game->GetBackBufferWidth() / 2;
+		cy -= game->GetBackBufferHeight() / 2;
 	}
 
-	if (cx < 0) cx = 0;
+	if (cx < 0) {
+		cx = 0;
+	}
+	else if ((cx  + game->GetBackBufferWidth() / 2) > worldWidth) {
+		cx = worldWidth - game->GetBackBufferWidth() / 2.0f;
+	}
 
 	CGame::GetInstance()->SetCamPos(cx, /*0.0f*/ cy);
-	/*DebugOutTitle(L"Camera: %0.2f, %0.2f", cx, cy);*/
+	DebugOutTitle(L"Camera: %0.2f, %0.2f", cx, cy);
 }
 
 void CPlayScene::Render()
@@ -452,50 +471,15 @@ void CPlayScene::Unload()
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
 
-bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
+bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o->IsDeleted(); }
 
 void CPlayScene::PurgeDeletedObjects()
 {
-	vector<LPGAMEOBJECT>::iterator it;
-	for (it = objects.begin(); it != objects.end(); it++)
-	{
-		LPGAMEOBJECT o = *it;
-		if (o->IsDeleted())
-		{
-			delete o;
-			*it = NULL;
-		}
-	}
-
 	// NOTE: remove_if will swap all deleted items to the end of the vector
 	// then simply trim the vector, this is much more efficient than deleting individual items
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
-}
-
-TileSet* CPlayScene::LoadTileSet(TiXmlElement* root)
-{
-	// Lấy tên file tileset để mở file đó và lấy các thông tin cần thiết
-	TiXmlElement* element = root->FirstChildElement("tileset");
-	string imageSourcePath = element->Attribute("source");
-
-	TiXmlDocument imageRootNode(("scenes//" + imageSourcePath).c_str());
-	if (imageRootNode.LoadFile())
-	{
-		TiXmlElement* tileSetElement = imageRootNode.RootElement();
-
-		TileSet* tileSet = new TileSet();
-		tileSetElement->QueryIntAttribute("spacing", &tileSet->spacing);
-		tileSetElement->QueryIntAttribute("margin", &tileSet->margin);
-		tileSetElement->QueryIntAttribute("tilewidth", &tileSet->width);
-		tileSetElement->QueryIntAttribute("tileheight", &tileSet->height);
-		tileSetElement->QueryIntAttribute("columns", &tileSet->columns);
-
-		return tileSet;
-	}
-
-	return NULL;
 }
 
 // Load tag data của layer để điền vào grid 2D [width, height]
@@ -516,11 +500,6 @@ void CPlayScene::ParseTile(TiXmlElement* root)
 	string strTile = layerElement->FirstChildElement("data")->GetText();
 	vector<string> tileArr = split(strTile, ",");
 
-	// Vị trí thứ i của num_tokens sẽ là ô có sprite
-	// Giá trị tại vị trí i:
-	// Bằng 0: ô này ko có sprite
-	// Khác 0: ô này có sprite, giá trị này là số thứ tự (bắt đầu từ 1, ko phải 0) của sprite trong ảnh texture
-
 	// Điền vào grid theo trình tự: trái -> phải, trên -> dưới
 	vector<vector<int>> tileIDs(colCount, vector<int>(rowCount));
 	for (int col = 0; col < colCount; col++)
@@ -540,6 +519,7 @@ void CPlayScene::ParseTile(TiXmlElement* root)
 		return;
 	}
 
+	// Add tile object
 	int spacing = tileSet->spacing
 	, margin = tileSet->margin
 	, tileWidth = tileSet->width
@@ -554,8 +534,11 @@ void CPlayScene::ParseTile(TiXmlElement* root)
 	{
 		for (int i = 0; i < tileIDs.size(); i++)
 		{
-			int sprite_ith = tileIDs[i][j];	// Vị trí của sprite (ith) trong ảnh texture bắt đầu từ số 1, ko phải số 0
-			if (sprite_ith != 0)	// Khác 0 tức là vị trí này có sprite
+			// Vị trí của sprite (ith) trong ảnh texture bắt đầu từ số 1, ko phải số 0
+			int sprite_ith = tileIDs[i][j];
+
+			// Khác 0 tức là vị trí này có sprite
+			if (sprite_ith != 0)
 			{
 				int x_th, y_th; // Bắt đầu từ số 0
 				if (sprite_ith % column > 0) // chia dư, tức là sprite này nằm không nằm ở cột cuối cùng của tileset
@@ -577,7 +560,7 @@ void CPlayScene::ParseTile(TiXmlElement* root)
 				// Thêm sprite vào database
 				sprites->Add(firstSpriteId, left, top, right, bottom, texMap);
 
-				LPTILE tile = new CTile(i, j, tileWidth, tileHeight, firstSpriteId++);
+				LPTILE tile = new CTile((float)i, (float)j, tileWidth, tileHeight, firstSpriteId++);
 				tiles.push_back(tile);
 			}
 		}
