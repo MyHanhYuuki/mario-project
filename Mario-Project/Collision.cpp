@@ -206,6 +206,9 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 		}
 
 		if (c->t < min_ty && c->ny != 0 && filterY == 1) {
+			if (c->obj->GetBlockDirection() == BLOCK_TOP && c->ny > 0) {
+				continue;
+			}
 			min_ty = c->t; min_iy = i;
 		}
 	}

@@ -39,7 +39,7 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (e->obj->IsBlocking() || e->obj->GetBlockDirection() == BLOCK_ALL) {
+	if (e->obj->GetBlockDirection() == BLOCK_ALL) {
 		if (e->ny != 0) {
 			vy = 0;
 			if (e->ny < 0) isOnPlatform = true;

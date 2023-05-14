@@ -24,11 +24,11 @@ public:
 	{
 		this->usedToBeBreakableBrick = wasBreakableBrick;
 		this->lifeTime_start = 0;
+		this->blockDirection = BLOCK_NONE;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {};
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	int IsBlocking() { return 0; }
 
 	void StartLiving() { this->lifeTime_start = GetTickCount64(); }
 };
