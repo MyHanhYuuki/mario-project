@@ -12,6 +12,7 @@
 #include "InvisiblePlatform.h"
 #include "SampleKeyEventHandler.h"
 #include "tinyxml.h"
+#include "QuestionBrick.h"
 
 using namespace std;
 
@@ -323,9 +324,11 @@ void CPlayScene::LoadMap(string filePath)
 					gameObject->SetBlockDirection(BLOCK_TOP);
 				}
 			} else if (name == "Goomba") {
-					gameObject = new CGoomba(x, y);
+				gameObject = new CGoomba(x, y);
 			} else if (name == "Coin") {
 				gameObject = new CCoin(x, y);
+			} else if ((int)name.rfind("QuestionBrick") >= 0) {
+				gameObject = new CQuestionBrick(x, y);
 			}
 			
 			if (gameObject) {

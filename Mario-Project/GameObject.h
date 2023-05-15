@@ -19,7 +19,10 @@ class CGameObject
 {
 protected:
 
-	float x; 
+	float originalX;
+	float originalY;
+
+	float x;
 	float y;
 
 	float vx;
@@ -46,8 +49,13 @@ public:
 	void RenderBoundingBox();
 
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; this->blockDirection = BLOCK_ALL; }
-
+	CGameObject(float x, float y) :CGameObject()
+	{ 
+		this->originalX = this->x = x;
+		this->originalY = this->y = y;
+		this->blockDirection = BLOCK_ALL;
+	}
+	virtual void Init() {};
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};

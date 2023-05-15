@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="2660" height="90" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="127">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="2660" height="90" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="140">
  <tileset firstgid="1" source="world_1_1.xml"/>
  <objectgroup id="6" name="Platform">
   <object id="65" name="Platform" x="0" y="0" width="8" height="416"/>
@@ -28,8 +28,8 @@
   <object id="108" name="TopPlatform" x="240" y="368" width="48" height="2"/>
   <object id="109" name="TopPlatform" x="272" y="336" width="48" height="2"/>
   <object id="110" name="TopPlatform" x="400" y="368" width="80" height="2"/>
-  <object id="111" name="TopPlatform" x="464" y="336" width="63.6364" height="2"/>
-  <object id="112" name="TopPlatform" x="512" y="304" width="63.6364" height="2"/>
+  <object id="111" name="TopPlatform" x="464" y="336" width="64" height="2"/>
+  <object id="112" name="TopPlatform" x="512" y="304" width="64" height="2"/>
   <object id="114" name="TopPlatform" x="512" y="384" width="96" height="2"/>
   <object id="115" name="TopPlatform" x="1264" y="384" width="112" height="2"/>
   <object id="116" name="TopPlatform" x="1296" y="352" width="112" height="2"/>
@@ -121,6 +121,33 @@
    <point/>
   </object>
   <object id="99" name="Coin" x="1840" y="128">
+   <point/>
+  </object>
+  <object id="127" name="QuestionBrick" x="176" y="352">
+   <point/>
+  </object>
+  <object id="129" name="QuestionBrick" x="193" y="352">
+   <point/>
+  </object>
+  <object id="133" name="QuestionBrick" x="224" y="304">
+   <point/>
+  </object>
+  <object id="134" name="QuestionBrick" x="240" y="304">
+   <point/>
+  </object>
+  <object id="135" name="QuestionBrick" x="416" y="320">
+   <point/>
+  </object>
+  <object id="136" name="QuestionBrick" x="656" y="384">
+   <point/>
+  </object>
+  <object id="137" name="QuestionBrick" x="704" y="352">
+   <point/>
+  </object>
+  <object id="138" name="QuestionBrick" x="1440" y="128">
+   <point/>
+  </object>
+  <object id="139" name="QuestionBrick" x="1472" y="368">
    <point/>
   </object>
  </objectgroup>
@@ -315,7 +342,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <imagelayer id="9" name="raw" visible="0" opacity="0.5">
+ <imagelayer id="9" name="raw" opacity="0.5">
   <image source="world-1-1.png" width="2816" height="656"/>
  </imagelayer>
 </map>
