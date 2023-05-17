@@ -64,6 +64,7 @@ public:
 	LPGAMEOBJECT GetPlayer() { return player; }
 
 	void Clear();
+	bool AddGameObjectBefore(LPGAMEOBJECT baseObj, LPGAMEOBJECT newGameObj);
 	void PurgeDeletedObjects();
 
 	void MakeCameraFollowMario();

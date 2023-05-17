@@ -18,3 +18,8 @@ vector<string> Split(string line, string delimeter = "\t");
 wstring ToWSTR(string st);
 
 LPCWSTR ToLPCWSTR(string st);
+
+template <typename T>
+T Clamp(T val, T min, T max) {
+	return val >= max ? max : val <= min ? min : val;
+}

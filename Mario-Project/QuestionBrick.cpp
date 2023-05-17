@@ -1,5 +1,7 @@
+#include "Utils.h"
 #include "QuestionBrick.h"
 #include "Mario.h"
+#include "Coin.h"
 
 CQuestionBrick::CQuestionBrick(float x, float y): CGameObject(x, y)
 {
@@ -7,9 +9,6 @@ CQuestionBrick::CQuestionBrick(float x, float y): CGameObject(x, y)
 }
 
 void CQuestionBrick::Init() {
-	bounceState = 0;
-	startBounceTime = 0;
-	bounceDelta = 0.0f;
 	state = QUESTION_BRICK_STATE_NEW;
 
 	ax = 0;
@@ -38,8 +37,11 @@ void CQuestionBrick::SetState(int state) {
 	this->state = state;
 
 	switch (state) {
-		case QUESTION_BRICK_STATE_BOUCING:
-			ay = -0.001;
+		case QUESTION_BRICK_STATE_BOUNCING:
+			ay = -QUESTION_BRICK_BOUNCING_ACCEL;
+			break;
+		case QUESTION_BRICK_STATE_BOUNCING_END:
+			ay = QUESTION_BRICK_BOUNCING_ACCEL;
 			break;
 		case QUESTION_BRICK_STATE_EMPTY:
 			ay = 0;
@@ -49,18 +51,46 @@ void CQuestionBrick::SetState(int state) {
 }
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
-	if (state == QUESTION_BRICK_STATE_BOUCING) {
-		if (originalY - y >= 4) {
-			ay = 0.001;
-		} else if (y - originalY >= 0) {
+	if (state == QUESTION_BRICK_STATE_BOUNCING) {
+		if (originalY - y >= QUESTION_BRICK_BOUNCING_AMOUNT) {
+			// Create inner item (vd: Coin, Mushroom)
+			// Check inner item (default item is coin)
+			LPGAMEOBJECT innerItem = NULL;
+
+			// Extract inner item by name
+			if ((int)name.rfind("LifeMushroom") > 0) {
+
+			}
+			else if ((int)name.rfind("Mushroom") > 0) {
+
+			}
+			else {
+				innerItem = new CCoin(x, y);
+				innerItem->SetState(COIN_STATE_BOUNCING);
+			}
+
+			// Add item into game world before its container
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddGameObjectBefore(this, innerItem);
+
+			SetState(QUESTION_BRICK_STATE_BOUNCING_END);
+		}
+	} else if (state == QUESTION_BRICK_STATE_BOUNCING_END) {
+		if (y - originalY >= 0) {
+			// Return to original position
 			y = originalY;
+
 			SetState(QUESTION_BRICK_STATE_EMPTY);
 		}
 	}
 
 	vy += ay * dt;
 
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	if (this->IsCollidable()) {
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+	}
+	else {
+		OnNoCollision(dt);
+	}
 }
 
 void CQuestionBrick::OnNoCollision(DWORD dt) {
@@ -72,8 +102,8 @@ void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (state == QUESTION_BRICK_STATE_NEW) {
 		if (dynamic_cast<CMario*>(e->obj)) {
-			if (e->ny < 0) {
-				SetState(QUESTION_BRICK_STATE_BOUCING);
+			if (e->ny) {
+				SetState(QUESTION_BRICK_STATE_BOUNCING);
 			}
 		}
 	}

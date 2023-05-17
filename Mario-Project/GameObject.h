@@ -18,6 +18,8 @@ using namespace std;
 class CGameObject
 {
 protected:
+	// Object name
+	string name;
 
 	float originalX;
 	float originalY;
@@ -50,12 +52,14 @@ public:
 
 	CGameObject();
 	CGameObject(float x, float y) :CGameObject()
-	{ 
+	{
 		this->originalX = this->x = x;
 		this->originalY = this->y = y;
 		this->blockDirection = BLOCK_ALL;
 	}
+	
 	virtual void Init() {};
+	void SetName(string name) { this->name = name; }
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};

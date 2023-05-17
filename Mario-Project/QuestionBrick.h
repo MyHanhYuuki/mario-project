@@ -10,12 +10,12 @@
 #define BRICK_BBOX_HEIGHT 16
 
 #define QUESTION_BRICK_STATE_NEW 1
-#define QUESTION_BRICK_STATE_BOUCING 2
-#define QUESTION_BRICK_STATE_EMPTY 3
+#define QUESTION_BRICK_STATE_BOUNCING 2
+#define QUESTION_BRICK_STATE_BOUNCING_END 3
+#define QUESTION_BRICK_STATE_EMPTY 4
 
-const int BOUNCE_TIME = 50;
-const int BOUNCE_DELTA = 24; // pixels
-const float BOUNCE_VEL = (float)BOUNCE_DELTA / (float)BOUNCE_TIME ;
+#define QUESTION_BRICK_BOUNCING_ACCEL 0.01f
+#define QUESTION_BRICK_BOUNCING_AMOUNT 12
 
 class CQuestionBrick : public CGameObject {
 private:
@@ -37,7 +37,7 @@ public:
 	//
 	// Collision ON or OFF ? This can change depending on object's state. For example: die
 	//
-	virtual int IsCollidable() { return state != QUESTION_BRICK_STATE_EMPTY; };
+	virtual int IsCollidable() { return state == QUESTION_BRICK_STATE_NEW; };
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
