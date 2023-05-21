@@ -38,8 +38,6 @@ public:
 	// Collision ON or OFF ? This can change depending on object's state. For example: die
 	//
 	virtual int IsCollidable() { return state == QUESTION_BRICK_STATE_NEW; };
-	void OnNoCollision(DWORD dt);
-	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void Init();
 };

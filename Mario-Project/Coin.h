@@ -39,10 +39,4 @@ public:
 
 	void StartLiving() { this->lifeTime_start = GetTickCount64(); }
 	void SetState(int state);
-
-	//
-	// Collision ON or OFF ? This can change depending on object's state. For example: die
-	//
-	//virtual int IsCollidable() { return state < COIN_STATE_BOUNCING; };
-	virtual int IsCollidable() { return 0; };
 };

@@ -51,6 +51,8 @@ void CQuestionBrick::SetState(int state) {
 }
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
+	vy += ay * dt;
+
 	if (state == QUESTION_BRICK_STATE_BOUNCING) {
 		if (originalY - y >= QUESTION_BRICK_BOUNCING_AMOUNT) {
 			// Create inner item (vd: Coin, Mushroom)
@@ -65,7 +67,7 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 
 			}
 			else {
-				innerItem = new CCoin(x, y);
+				innerItem = new CCoin(originalX, originalY - QUESTION_BRICK_BOUNCING_AMOUNT);
 				innerItem->SetState(COIN_STATE_BOUNCING);
 			}
 
@@ -83,28 +85,5 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 		}
 	}
 
-	vy += ay * dt;
-
-	if (this->IsCollidable()) {
-		CCollision::GetInstance()->Process(this, dt, coObjects);
-	}
-	else {
-		OnNoCollision(dt);
-	}
-}
-
-void CQuestionBrick::OnNoCollision(DWORD dt) {
-	x += vx * dt;
 	y += vy * dt;
-}
-
-void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
-{
-	if (state == QUESTION_BRICK_STATE_NEW) {
-		if (dynamic_cast<CMario*>(e->obj)) {
-			if (e->ny) {
-				SetState(QUESTION_BRICK_STATE_BOUNCING);
-			}
-		}
-	}
 }

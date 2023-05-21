@@ -321,16 +321,22 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		else
 		if (colX != NULL)
 		{
-			x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
 			y += dy;
-			objSrc->OnCollisionWith(colX);
+
+			if (colX->obj->IsCollidable()) {
+				x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
+				objSrc->OnCollisionWith(colX);
+			}
 		}
 		else 
 			if (colY != NULL)
 			{
 				x += dx;
-				y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
-				objSrc->OnCollisionWith(colY);
+
+				if (colY->obj->IsCollidable()) {
+					y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
+					objSrc->OnCollisionWith(colY);
+				}
 			}
 			else // both colX & colY are NULL 
 			{

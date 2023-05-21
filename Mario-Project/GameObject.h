@@ -69,7 +69,7 @@ public:
 	//
 	// Collision ON or OFF ? This can change depending on object's state. For example: die
 	//
-	virtual int IsCollidable() { return 0; };
+	virtual int IsCollidable() { return 1; };
 
 	// When no collision has been detected (triggered by CCollision::Process)
 	virtual void OnNoCollision(DWORD dt) {};

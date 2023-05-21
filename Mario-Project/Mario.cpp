@@ -8,6 +8,7 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "InvisiblePlatform.h"
+#include "QuestionBrick.h"
 
 #include "Collision.h"
 
@@ -60,6 +61,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+		OnCollisionWithQuestionBrick(e);
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -106,6 +110,14 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+}
+
+void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e) {
+	if (e->obj->IsCollidable()) {
+		if (e->ny > 0) {
+			e->obj->SetState(QUESTION_BRICK_STATE_BOUNCING);
+		}
+	}
 }
 
 //
