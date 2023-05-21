@@ -1,0 +1,4 @@
+#id	left	top	right	bottom	texture_id
+[SPRITES]
+#Mushroom
+70000	300	189	316	205	20

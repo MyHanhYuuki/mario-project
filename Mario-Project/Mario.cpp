@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "InvisiblePlatform.h"
 #include "QuestionBrick.h"
+#include "Mushroom.h"
 
 #include "Collision.h"
 
@@ -64,6 +65,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
 		OnCollisionWithQuestionBrick(e);
 	}
+	else if (dynamic_cast<CMushroom*>(e->obj)) {
+		OnCollisionWithMushroom(e);
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -81,12 +85,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			float xx, yy;
 			goomba->GetPosition(xx, yy);
 
-			// Gain point
-			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->FireGainPointEvent(
-																			EVENT_GAIN_POINT
-																			, xx
-																			, yy - GOOMBA_BBOX_HEIGHT_DIE
-																		);
+			// Emit event
+			FireGainPointEvent(xx, yy - GOOMBA_BBOX_HEIGHT_DIE);
 		}
 	}
 	else // hit by Goomba
@@ -128,6 +128,18 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e) {
 			e->obj->SetState(QUESTION_BRICK_STATE_BOUNCING);
 		}
 	}
+}
+
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+	SetLevel(MARIO_LEVEL_BIG);
+
+	float xx, yy;
+	e->obj->GetPosition(xx, yy);
+
+	// Emit event
+	FireGainPointEvent(xx, yy - MUSHROOM_BBOX_HEIGHT, 1000);
 }
 
 //
@@ -388,3 +400,12 @@ void CMario::SetLevel(int l)
 	level = l;
 }
 
+void CMario::FireGainPointEvent(float x, float y, int point) {
+	// Emit gain point event
+	((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->FireGainPointEvent(
+																	EVENT_GAIN_POINT
+																	, x
+																	, y
+																	, point
+																);
+}

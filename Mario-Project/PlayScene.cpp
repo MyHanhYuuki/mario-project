@@ -330,6 +330,7 @@ void CPlayScene::LoadMap(string filePath)
 			}
 			
 			if (gameObject) {
+				gameObject->SetName(name);
 				this->objects.push_back(gameObject);
 			}
 		}

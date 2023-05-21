@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="2660" height="90" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="140">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="2660" height="90" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="142">
  <tileset firstgid="1" source="world_1_1.xml"/>
  <objectgroup id="6" name="Platform">
   <object id="65" name="Platform" x="0" y="0" width="8" height="416"/>
@@ -40,6 +40,11 @@
   <object id="122" name="HellPlatform" x="1616" y="432" width="48" height="2"/>
   <object id="123" name="HellPlatform" x="1504" y="432" width="32" height="2"/>
   <object id="124" name="HellPlatform" x="1088" y="432" width="64" height="2"/>
+ </objectgroup>
+ <objectgroup id="16" name="Test" visible="0">
+  <object id="140" name="QuestionBrick" x="144" y="368" visible="0">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="12" name="GameObject">
   <object id="68" name="Goomba" x="224" y="400">
@@ -132,13 +137,13 @@
   <object id="133" name="QuestionBrick" x="224" y="304">
    <point/>
   </object>
-  <object id="134" name="QuestionBrick" x="240" y="304">
+  <object id="134" name="LevelupQuestionBrick" x="240" y="304">
    <point/>
   </object>
   <object id="135" name="QuestionBrick" x="416" y="320">
    <point/>
   </object>
-  <object id="136" name="QuestionBrick" x="656" y="384">
+  <object id="136" name="QuestionBrick" x="654" y="392">
    <point/>
   </object>
   <object id="137" name="QuestionBrick" x="704" y="352">
