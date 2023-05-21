@@ -13,6 +13,7 @@
 #include "SampleKeyEventHandler.h"
 #include "tinyxml.h"
 #include "QuestionBrick.h"
+#include "Point.h"
 
 using namespace std;
 
@@ -87,8 +88,6 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
-
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
 	LPANIMATION ani = new CAnimation();
 
@@ -312,7 +311,6 @@ void CPlayScene::LoadMap(string filePath)
 
 			// Skip invisible object
 			if (object->Attribute("visible")) {
-				DebugOut(L"%s is invisible\n", ToLPCWSTR(name));
 				continue;
 			}
 
@@ -334,8 +332,6 @@ void CPlayScene::LoadMap(string filePath)
 			if (gameObject) {
 				this->objects.push_back(gameObject);
 			}
-
-			DebugOut(L"Load %s object is %s\n", ToLPCWSTR(name), (gameObject ? L"succeeded" : L"fail"));
 		}
 	}
 }
@@ -419,7 +415,6 @@ void CPlayScene::MakeCameraFollowMario()
 	}
 
 	CGame::GetInstance()->SetCamPos(cx, /*0.0f*/ cy);
-	DebugOutTitle(L"Camera: %0.2f, %0.2f", cx, cy);
 }
 
 void CPlayScene::Render()
@@ -576,10 +571,17 @@ bool CPlayScene::AddGameObjectBefore(LPGAMEOBJECT baseObj, LPGAMEOBJECT newGameO
 	if (index != objects.end()) {
 		objects.insert(index, newGameObj);
 
-		// objects->push_back(innerItem);
-		DebugOut(L" in %d\n", index);
 		return true;
 	}
 
 	return false;
+}
+
+void CPlayScene::FireGainPointEvent(string eventName, float x, float y, int point)
+{
+	auto pointObj = new CPoint(x, y);
+	pointObj->SetPoint(point);
+	pointObj->SetState(POINT_STATE_BOUNCING);
+
+	objects.push_back(pointObj);
 }

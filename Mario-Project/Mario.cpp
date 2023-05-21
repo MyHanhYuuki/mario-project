@@ -29,7 +29,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
-	DebugOutTitle(L"vx:%f, vy:%f", vx, vy);
+	DebugOutTitle(L"coin: %d", coin);
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -77,6 +77,16 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+
+			float xx, yy;
+			goomba->GetPosition(xx, yy);
+
+			// Gain point
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->FireGainPointEvent(
+																			EVENT_GAIN_POINT
+																			, xx
+																			, yy - GOOMBA_BBOX_HEIGHT_DIE
+																		);
 		}
 	}
 	else // hit by Goomba

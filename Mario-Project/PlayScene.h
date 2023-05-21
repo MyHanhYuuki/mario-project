@@ -1,4 +1,5 @@
 #pragma once
+#include "const.h"
 #include "tinyxml.h"
 #include "Game.h"
 #include "Textures.h"
@@ -8,7 +9,6 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Tile.h"
-//#include "Koopas.h"
 
 #define DEFAULT_ID_HIDDEN_ZONE_BASE_PLATFORM 720
 #define BASE_PLATFORM_HEIGHT 16
@@ -75,6 +75,8 @@ public:
 		this->old_base_platform_pos_y = base_platform_pos_y;
 		this->base_platform_pos_y = pos_y;
 	}
+
+	void FireGainPointEvent(string eventName, float x, float y, int point=100);
 };
 
 typedef CPlayScene* LPPLAYSCENE;

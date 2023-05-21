@@ -12,7 +12,14 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	else if (state == COIN_STATE_FALL) {
-		if (y - originalY >= -(COIN_WIDTH/2)) {
+		if (y - originalY >= -COIN_VERTICAL_MOVE_OFFSET) {
+			// Emit gain point event
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->FireGainPointEvent(
+																				EVENT_GAIN_POINT
+																				, originalX
+																				, originalY - COIN_VERTICAL_MOVE_OFFSET
+																			);
+
 			SetState(COIN_STATE_BOUNCING_END);
 		}
 	}

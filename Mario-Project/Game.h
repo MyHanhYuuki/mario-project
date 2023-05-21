@@ -8,6 +8,7 @@ using namespace std;
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#include <string>
 
 #include "Texture.h"
 #include "KeyEventHandler.h"
@@ -58,6 +59,7 @@ private:
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
+	void _ParseSection_TEXTURES(string line);
 
 public:
 	// Init DirectX, Sprite Handler
@@ -87,7 +89,6 @@ public:
 	void ProcessKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
 
-
 	ID3D10Device* GetDirect3DDevice() { return this->pD3DDevice; }
 	IDXGISwapChain* GetSwapChain() { return this->pSwapChain; }
 	ID3D10RenderTargetView* GetRenderTargetView() { return this->pRenderTargetView; }
@@ -110,9 +111,6 @@ public:
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
-
-	void _ParseSection_TEXTURES(string line);
-
 
 	~CGame();
 };

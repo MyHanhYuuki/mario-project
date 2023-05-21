@@ -19,6 +19,7 @@
 #define COIN_BOUNCING_ACCEL 0.03f
 #define COIN_Y_MAX_VEL 0.3f
 #define COIN_BOUNCING_AMOUNT 64
+#define COIN_VERTICAL_MOVE_OFFSET 8
 
 class CCoin : public CGameObject {
 private:

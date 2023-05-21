@@ -5,6 +5,7 @@ brick.txt
 platform.txt
 goomba.txt
 coin.txt
+font.txt
 
 [TILEMAP]
 scenes\world_1_1.tmx

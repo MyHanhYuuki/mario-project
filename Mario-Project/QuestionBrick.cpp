@@ -52,12 +52,13 @@ void CQuestionBrick::SetState(int state) {
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 	vy += ay * dt;
+	vy = Clamp(vy, -QUESTION_Y_MAX_VEL, QUESTION_Y_MAX_VEL);
 
 	if (state == QUESTION_BRICK_STATE_BOUNCING) {
 		if (originalY - y >= QUESTION_BRICK_BOUNCING_AMOUNT) {
 			// Create inner item (vd: Coin, Mushroom)
 			// Check inner item (default item is coin)
-			LPGAMEOBJECT innerItem = NULL;
+			LPGAMEOBJECT innerItem = nullptr;
 
 			// Extract inner item by name
 			if ((int)name.rfind("LifeMushroom") > 0) {
