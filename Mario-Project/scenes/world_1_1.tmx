@@ -128,7 +128,7 @@
   <object id="99" name="Coin" x="1840" y="128">
    <point/>
   </object>
-  <object id="127" name="QuestionBrick" x="176" y="352">
+  <object id="127" name="LifeMushroomQuestionBrick" x="176" y="352">
    <point/>
   </object>
   <object id="129" name="QuestionBrick" x="193" y="352">

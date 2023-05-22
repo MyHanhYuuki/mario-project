@@ -8,7 +8,7 @@ CPoint::CPoint(float x, float y): CGameObject(x, y) {
 };
 
 void CPoint::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-		vy += ay * dt;
+	vy += ay * dt;
 
 	if (state == POINT_STATE_BOUNCING) {
 		if (originalY - y >= POINT_BOUNCING_AMOUNT) {

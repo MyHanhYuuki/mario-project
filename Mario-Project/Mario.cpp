@@ -10,6 +10,7 @@
 #include "InvisiblePlatform.h"
 #include "QuestionBrick.h"
 #include "Mushroom.h"
+#include "LifeMushroom.h"
 
 #include "Collision.h"
 
@@ -64,6 +65,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
 		OnCollisionWithQuestionBrick(e);
+	}
+	else if (dynamic_cast<CLifeMushroom*>(e->obj)) {
+		OnCollisionWithLifeMushroom(e);
 	}
 	else if (dynamic_cast<CMushroom*>(e->obj)) {
 		OnCollisionWithMushroom(e);
@@ -123,11 +127,23 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 }
 
 void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e) {
-	if (e->obj->IsCollidable()) {
+	if (e->obj->GetState() == QUESTION_BRICK_STATE_NEW) {
 		if (e->ny > 0) {
 			e->obj->SetState(QUESTION_BRICK_STATE_BOUNCING);
 		}
 	}
+}
+
+void CMario::OnCollisionWithLifeMushroom(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+	SetLevel(MARIO_LEVEL_BIG);
+
+	float xx, yy;
+	e->obj->GetPosition(xx, yy);
+
+	// Emit event
+	FireGainPointEvent(xx, yy - MUSHROOM_BBOX_HEIGHT, 8001);
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)

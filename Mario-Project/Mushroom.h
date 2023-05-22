@@ -19,7 +19,7 @@
 
 class CMushroom : public CGameObject
 {
-private:
+protected:
 	float ay;
 public:
 	CMushroom(float x, float y);

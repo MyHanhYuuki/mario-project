@@ -3,6 +3,7 @@
 #include "Mario.h"
 #include "Coin.h"
 #include "Mushroom.h"
+#include "LifeMushRoom.h""
 
 CQuestionBrick::CQuestionBrick(float x, float y): CGameObject(x, y)
 {
@@ -62,8 +63,9 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 			LPGAMEOBJECT innerItem = nullptr;
 
 			// Extract inner item by name
-			if ((int)name.rfind("LifeMushroom") > 0) {
-
+			if ((int)name.rfind("LifeMushroom") >= 0) {
+				innerItem = new CLifeMushroom(originalX, originalY-QUESTION_BRICK_BOUNCING_AMOUNT/2);
+				innerItem->SetState(MUSHROOM_STATE_BOUNCING);
 			}
 			else if ((int)name.rfind("Levelup") >= 0) {
 				innerItem = new CMushroom(originalX, originalY-QUESTION_BRICK_BOUNCING_AMOUNT/2);

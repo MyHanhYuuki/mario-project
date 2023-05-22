@@ -159,6 +159,7 @@
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="InvisiblePlatform.h" />
     <ClInclude Include="KeyEventHandler.h" />
+    <ClInclude Include="LifeMushRoom.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="Platform.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="InvisiblePlatform.cpp" />
+    <ClCompile Include="LifeMushRoom.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Mushroom.cpp" />
