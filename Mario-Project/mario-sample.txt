@@ -17,3 +17,4 @@ height	240
 20	textures\misc.png
 30	textures\tiles.png
 40	textures\font-ui.png
+50	textures\misc1.png

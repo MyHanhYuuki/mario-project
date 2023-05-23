@@ -62,6 +62,7 @@ public:
 	virtual void Unload();
 
 	LPGAMEOBJECT GetPlayer() { return player; }
+	int GetPlayerLevel() { return ((CMario*)player)->GetLevel(); }
 
 	void Clear();
 	bool AddGameObjectBefore(LPGAMEOBJECT baseObj, LPGAMEOBJECT newGameObj);

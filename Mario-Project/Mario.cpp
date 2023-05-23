@@ -11,6 +11,7 @@
 #include "QuestionBrick.h"
 #include "Mushroom.h"
 #include "LifeMushroom.h"
+#include "Leaf.h"
 
 #include "Collision.h"
 
@@ -71,6 +72,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<CMushroom*>(e->obj)) {
 		OnCollisionWithMushroom(e);
+	}
+	else if (dynamic_cast<CLeaf*>(e->obj)) {
+		OnCollisionWithLeaf(e);
 	}
 }
 
@@ -137,7 +141,6 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e) {
 void CMario::OnCollisionWithLifeMushroom(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	SetLevel(MARIO_LEVEL_BIG);
 
 	float xx, yy;
 	e->obj->GetPosition(xx, yy);
@@ -147,6 +150,18 @@ void CMario::OnCollisionWithLifeMushroom(LPCOLLISIONEVENT e)
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+	SetLevel(MARIO_LEVEL_BIG);
+
+	float xx, yy;
+	e->obj->GetPosition(xx, yy);
+
+	// Emit event
+	FireGainPointEvent(xx, yy - MUSHROOM_BBOX_HEIGHT, 1000);
+}
+
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	SetLevel(MARIO_LEVEL_BIG);

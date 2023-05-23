@@ -3,7 +3,8 @@
 #include "Mario.h"
 #include "Coin.h"
 #include "Mushroom.h"
-#include "LifeMushRoom.h""
+#include "LifeMushRoom.h"
+#include "Leaf.h"
 
 CQuestionBrick::CQuestionBrick(float x, float y): CGameObject(x, y)
 {
@@ -61,23 +62,35 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 			// Create inner item (vd: Coin, Mushroom)
 			// Check inner item (default item is coin)
 			LPGAMEOBJECT innerItem = nullptr;
+			LPGAMEOBJECT baseItem = nullptr;
 
 			// Extract inner item by name
 			if ((int)name.rfind("LifeMushroom") >= 0) {
+				baseItem = this;
 				innerItem = new CLifeMushroom(originalX, originalY-QUESTION_BRICK_BOUNCING_AMOUNT/2);
 				innerItem->SetState(MUSHROOM_STATE_BOUNCING);
 			}
 			else if ((int)name.rfind("Levelup") >= 0) {
-				innerItem = new CMushroom(originalX, originalY-QUESTION_BRICK_BOUNCING_AMOUNT/2);
-				innerItem->SetState(MUSHROOM_STATE_BOUNCING);
+				// Add mushroom for small mario
+				if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayerLevel() == MARIO_LEVEL_SMALL) {
+					innerItem = new CMushroom(originalX, originalY - QUESTION_BRICK_BOUNCING_AMOUNT / 2);
+					innerItem->SetState(MUSHROOM_STATE_BOUNCING);
+				}
+
+				// Add leaf for big mario
+				else {
+					innerItem = new CLeaf(originalX, originalY - QUESTION_BRICK_BOUNCING_AMOUNT / 2);
+					innerItem->SetState(MUSHROOM_STATE_BOUNCING);
+				}
 			}
 			else {
+				baseItem = this;
 				innerItem = new CCoin(originalX, originalY - QUESTION_BRICK_BOUNCING_AMOUNT);
 				innerItem->SetState(COIN_STATE_BOUNCING);
 			}
 
 			// Add item into game world before its container
-			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddGameObjectBefore(this, innerItem);
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddGameObjectBefore(baseItem, innerItem);
 
 			SetState(QUESTION_BRICK_STATE_BOUNCING_END);
 		}

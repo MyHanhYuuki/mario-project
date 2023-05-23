@@ -567,6 +567,11 @@ void CPlayScene::ParseTile(TiXmlElement* root)
 }
 
 bool CPlayScene::AddGameObjectBefore(LPGAMEOBJECT baseObj, LPGAMEOBJECT newGameObj) {
+	if (baseObj == nullptr) {
+		objects.push_back(newGameObj);
+		return true;
+	}
+
 	// Add new item into object list before this position (due to update order)
 	auto index = find(objects.begin(), objects.end(), baseObj);
 	if (index != objects.end()) {
