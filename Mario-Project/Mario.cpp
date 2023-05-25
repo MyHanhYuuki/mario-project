@@ -164,7 +164,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	SetLevel(MARIO_LEVEL_BIG);
+	SetLevel(MARIO_LEVEL_TANUKI);
 
 	float xx, yy;
 	e->obj->GetPosition(xx, yy);
@@ -296,6 +296,67 @@ int CMario::GetAniIdBig()
 	return aniId;
 }
 
+//
+// Get animdation ID for big Mario
+//
+int CMario::GetAniIdTanuki()
+{
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_TANUKI_JUMP_RUN_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_TANUKI_JUMP_RUN_LEFT;
+		}
+		else
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_TANUKI_JUMP_WALK_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_TANUKI_JUMP_WALK_LEFT;
+		}
+	}
+	else
+		if (isSitting)
+		{
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_TANUKI_SIT_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_TANUKI_SIT_LEFT;
+		}
+		else
+			if (vx == 0)
+			{
+				if (nx > 0) aniId = ID_ANI_MARIO_TANUKI_IDLE_RIGHT;
+				else aniId = ID_ANI_MARIO_TANUKI_IDLE_LEFT;
+			}
+			else if (vx > 0)
+			{
+				if (ax < 0)
+					aniId = ID_ANI_MARIO_TANUKI_BRACE_RIGHT;
+				else if (ax == MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_TANUKI_RUNNING_RIGHT;
+				else if (ax == MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_TANUKI_WALKING_RIGHT;
+			}
+			else // vx < 0
+			{
+				if (ax > 0)
+					aniId = ID_ANI_MARIO_TANUKI_BRACE_LEFT;
+				else if (ax == -MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_TANUKI_RUNNING_LEFT;
+				else if (ax == -MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_TANUKI_WALKING_LEFT;
+			}
+
+	if (aniId == -1) aniId = ID_ANI_MARIO_TANUKI_IDLE_RIGHT;
+
+	return aniId;
+}
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -307,6 +368,8 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
+	else if (level == MARIO_LEVEL_TANUKI)
+		aniId = GetAniIdTanuki();
 
 	animations->Get(aniId)->Render(x, y);
 
@@ -410,6 +473,23 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			top = y - MARIO_BIG_BBOX_HEIGHT/2;
 			right = left + MARIO_BIG_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
+		}
+	}
+	else if (level==MARIO_LEVEL_TANUKI)
+	{
+		if (isSitting)
+		{
+			left = x - MARIO_TANUKI_SITTING_BBOX_WIDTH / 2;
+			top = y - MARIO_TANUKI_SITTING_BBOX_HEIGHT / 2;
+			right = left + MARIO_TANUKI_SITTING_BBOX_WIDTH;
+			bottom = top + MARIO_TANUKI_SITTING_BBOX_HEIGHT;
+		}
+		else 
+		{
+			left = x - MARIO_TANUKI_BBOX_WIDTH/2;
+			top = y - MARIO_TANUKI_BBOX_HEIGHT/2;
+			right = left + MARIO_TANUKI_BBOX_WIDTH;
+			bottom = top + MARIO_TANUKI_BBOX_HEIGHT;
 		}
 	}
 	else
