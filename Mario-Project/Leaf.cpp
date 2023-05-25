@@ -5,6 +5,7 @@
 CLeaf::CLeaf(float x, float y) : CGameObject(x, y) {
     blockDirection = BLOCK_NONE;
 	ay = 0;
+	nx = 1;
 }
 
 void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -19,9 +20,10 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	} 
 	else {
 		if (state == LEAF_STATE_FALL) {
-			// x = originalX + LEAF_AMPLITUDE * cos((y - originalY)/10 - LEAF_BOUNCING_AMOUNT);
+			// TODO: correct vx base on vy
+			auto prevVx = vx;
 			vx = -LEAF_X_MAX_VEL * sin((y - originalY)/10 - LEAF_BOUNCING_AMOUNT);
-			DebugOut(L"%0.3f, %0.3f, %0.3f\n", vx, x, originalX);
+			nx = vx - prevVx < 0 ? -1 : 1;
 		}
     }
 
@@ -50,7 +52,8 @@ void CLeaf::SetState(int state)
 
 void CLeaf::Render()
 {
-    CSprites::GetInstance()->Get(ID_SPRITE_LEAF)->Draw(x, y);
+    auto spriteID = nx == 1 ? ID_SPRITE_LEAF : ID_SPRITE_LEAF + 1;
+    CSprites::GetInstance()->Get(spriteID)->Draw(x, y);
 
 	RenderBoundingBox();
 }

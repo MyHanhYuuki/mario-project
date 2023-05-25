@@ -19,6 +19,7 @@ class CLeaf: public CGameObject
 {
 private:
 	float ay;
+	int nx;
 public:
 	CLeaf(float x, float y);
 	void Render();
