@@ -13,7 +13,7 @@
 using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
-#define BBOX_ALPHA 0.0f		// Bounding box transparency
+#define BBOX_ALPHA 0.5f		// Bounding box transparency
 
 class CGameObject
 {
@@ -56,6 +56,9 @@ public:
 		this->originalX = this->x = x;
 		this->originalY = this->y = y;
 		this->blockDirection = BLOCK_ALL;
+	}
+	CGameObject(string name, float x, float y) : CGameObject(x, y) {
+		this->name = name;
 	}
 	
 	virtual void Init() {};

@@ -14,6 +14,7 @@
 #include "tinyxml.h"
 #include "QuestionBrick.h"
 #include "Point.h"
+#include "Pipe.h"
 
 using namespace std;
 
@@ -316,11 +317,7 @@ void CPlayScene::LoadMap(string filePath)
 
 			// Parse Platform and it's derived class
 			if ((int)name.rfind("Platform") >= 0 || name == "pipe") {
-				gameObject = new CInvisiblePlatform(x, y, OBJECT_TYPE_INVISIBLE_PLATFORM, width, height);
-
-				if ((int)name.rfind("Top") >= 0) {
-					gameObject->SetBlockDirection(BLOCK_TOP);
-				}
+				gameObject = new CInvisiblePlatform(name, x, y, OBJECT_TYPE_INVISIBLE_PLATFORM, width, height);
 			} else if (name == "Goomba") {
 				gameObject = new CGoomba(x, y);
 			} else if (name == "Coin") {

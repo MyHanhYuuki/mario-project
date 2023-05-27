@@ -1,5 +1,22 @@
 #include "InvisiblePlatform.h"
 
+CInvisiblePlatform::CInvisiblePlatform(float x, float y, int type, int width, int height) : CGameObject(x, y)
+{
+	this->width = width;
+	this->height = height;
+	this->blockDirection = BLOCK_ALL;
+}
+
+CInvisiblePlatform::CInvisiblePlatform(string name, float x, float y, int type, int width, int height) : CInvisiblePlatform(x, y, type, width, height)
+{
+	this->name = name;
+
+	// Extract direction from name
+	if ((int)name.rfind("Top") >= 0) {
+		SetBlockDirection(BLOCK_TOP);
+	}
+}
+
 void CInvisiblePlatform::Update(DWORD dt)
 {
 	/*DebugOutTitle(L"Invis: %0.2f, %0.2f", x, y);*/
