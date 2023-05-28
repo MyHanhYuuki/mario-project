@@ -12,6 +12,7 @@
 #include "Mushroom.h"
 #include "LifeMushroom.h"
 #include "Leaf.h"
+#include "VenusFireTrap.h"
 
 #include "Collision.h"
 
@@ -76,6 +77,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CLeaf*>(e->obj)) {
 		OnCollisionWithLeaf(e);
 	}
+	else if (dynamic_cast<CVenusFireTrap*>(e->obj)) {
+		OnCollisionWithVenueFireTrap(e);
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -103,16 +107,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
-				if (level > MARIO_LEVEL_SMALL)
-				{
-					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
-				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
-				}
+				OnCollisionWithEnemy(e);
 			}
 		}
 	}
@@ -171,6 +166,25 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 
 	// Emit event
 	FireGainPointEvent(xx, yy - MUSHROOM_BBOX_HEIGHT, 1000);
+}
+
+void CMario::OnCollisionWithVenueFireTrap(LPCOLLISIONEVENT e)
+{
+	OnCollisionWithEnemy(e);
+}
+
+void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
+{
+	if (level > MARIO_LEVEL_SMALL)
+	{
+		level -= 1;
+		StartUntouchable();
+	}
+	else
+	{
+		DebugOut(L">>> Mario DIE >>> \n");
+		SetState(MARIO_STATE_DIE);
+	}
 }
 
 //

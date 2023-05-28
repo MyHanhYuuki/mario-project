@@ -8,6 +8,7 @@ coin.txt
 font.txt
 item.txt
 pipe.txt
+venus_fire_trap.txt
 
 [TILEMAP]
 scenes\world_1_1.tmx

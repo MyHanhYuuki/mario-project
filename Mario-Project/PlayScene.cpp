@@ -15,6 +15,7 @@
 #include "QuestionBrick.h"
 #include "Point.h"
 #include "Pipe.h"
+#include "VenusFireTrap.h"
 
 using namespace std;
 
@@ -326,6 +327,8 @@ void CPlayScene::LoadMap(string filePath)
 				gameObject = new CQuestionBrick(x, y);
 			} else if ((int)name.rfind("Pipe") >= 0) {
 				gameObject = new CPipe(name, x, y, width, height);
+			} else if ((int)name.rfind("VenusFireTrap") >= 0) {
+				gameObject = new CVenusFireTrap(x, y);
 			}
 			
 			if (gameObject) {

@@ -10,6 +10,9 @@
 #define PIPE_HORIZONTAL_HALF_WIDTH 16
 #define PIPE_HORIZONTAL_HALF_HEIGHT 32
 
+#define PIPE_STATE_NEW 1
+#define PIPE_STATE_EMPTY 2
+
 class CPipe : public CGameObject
 {
 private:
@@ -20,6 +23,7 @@ public:
 	{
 		this->isVertial = true;
 		this->countOfHalfPart = 0;
+		state = PIPE_STATE_NEW;
 	}
 	CPipe(string name, float x, float y, int width, int height) : CPipe(x, y, width, height) {
 		this->name = name;
@@ -36,6 +40,6 @@ public:
 	void virtual SetState(int state);
 
 	void virtual Render();
-	void virtual Update(DWORD dt) {}
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	void virtual GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

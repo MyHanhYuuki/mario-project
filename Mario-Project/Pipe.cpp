@@ -1,5 +1,25 @@
 #include "Pipe.h"
 #include "Textures.h"
+#include "PlayScene.h"
+#include "VenusFireTrap.h"
+
+void CPipe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (state == PIPE_STATE_NEW) {
+
+		LPGAMEOBJECT innerObject = nullptr;
+		if ((int)name.rfind("VenusFireTrap") >= 0) {
+			innerObject = new CVenusFireTrap(x + width/2, y - PIPE_BASE_HEIGHT / 2);
+		}
+
+		if (innerObject != nullptr) {
+			// Add item into game world before its container
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddGameObjectBefore(this, innerObject);
+		}
+
+		SetState(PIPE_STATE_EMPTY);
+	}
+}
 
 void CPipe::Render()
 {
@@ -50,4 +70,6 @@ void CPipe::GetBoundingBox(float &l, float &t, float &r, float &b)
 	b = t + height;
 }
 
-void CPipe::SetState(int state) {}
+void CPipe::SetState(int state) {
+	this->state = state;
+}
