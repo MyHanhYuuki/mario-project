@@ -7,6 +7,7 @@
 #include "BreakableBrick.h"
 
 #define ID_ANI_COIN 11000
+#define ID_ANI_COIN_COLLECTABLE 11001
 
 #define	COIN_WIDTH 16
 #define COIN_BBOX_WIDTH 10
@@ -15,6 +16,7 @@
 #define COIN_STATE_BOUNCING 2
 #define COIN_STATE_FALL 3
 #define COIN_STATE_BOUNCING_END 4
+#define COIN_STATE_COLLECTED 5
 
 #define COIN_BOUNCING_ACCEL 0.03f
 #define COIN_Y_MAX_VEL 0.3f
@@ -23,12 +25,12 @@
 
 class CCoin : public CGameObject {
 private:
-	bool usedToBeBreakableBrick;
+	bool isCollectable;
 	ULONGLONG lifeTime_start;
 public:
-	CCoin(float x, float y, bool wasBreakableBrick = false) : CGameObject(x, y)
+	CCoin(float x, float y, bool isCollectable = false) : CGameObject(x, y)
 	{
-		this->usedToBeBreakableBrick = wasBreakableBrick;
+		this->isCollectable = isCollectable;
 		this->lifeTime_start = 0;
 		this->blockDirection = BLOCK_NONE;
 	}

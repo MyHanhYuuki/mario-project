@@ -48,13 +48,22 @@ void CCoin::SetState(int state)
 			y = originalY;
 			isDeleted = true;
 			break;
+		case COIN_STATE_COLLECTED:
+			// Emit gain point event
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->FireGainPointEvent(
+																				EVENT_GAIN_POINT
+																				, originalX
+																				, originalY - COIN_VERTICAL_MOVE_OFFSET
+																			);
+			isDeleted = true;
+			break;
 	}
 }
 
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_COIN)->Render(x, y);
+	animations->Get(isCollectable ? ID_ANI_COIN_COLLECTABLE : ID_ANI_COIN)->Render(x, y);
 
 	RenderBoundingBox();
 }

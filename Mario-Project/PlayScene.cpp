@@ -321,7 +321,7 @@ void CPlayScene::LoadMap(string filePath)
 			} else if (name == "Goomba") {
 				gameObject = new CGoomba(x, y);
 			} else if (name == "Coin") {
-				gameObject = new CCoin(x, y);
+				gameObject = new CCoin(x, y, true);
 			} else if ((int)name.rfind("QuestionBrick") >= 0) {
 				gameObject = new CQuestionBrick(x, y);
 			} else if ((int)name.rfind("Pipe") >= 0) {

@@ -120,8 +120,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	e->obj->Delete();
 	coin++;
+	e->obj->SetState(COIN_STATE_COLLECTED);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
