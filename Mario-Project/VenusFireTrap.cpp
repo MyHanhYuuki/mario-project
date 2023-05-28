@@ -1,6 +1,7 @@
 #include "VenusFireTrap.h"
 #include "Utils.h"
 #include "Playscene.h"
+#include "FireBall.h"
 
 void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -13,6 +14,26 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	else if (state == VENUS_FIRE_TRAP_STATE_STAND) {
+		if (GetTickCount64() - standStart >= VENUS_FIRE_TRAP_FIRE_TRIGGER_AMOUNT) {
+			if (IsFirable()) {
+				// Sould double x vel ?
+				float dx, dy;
+				GetDistanceWithPlayer(dx, dy);
+				auto souldDoubleXVel = abs(dx/dy) > 1;
+				
+				auto fireball = new CFireBall(x, y);
+				fireball->SetSpeed(nx*FIREBALL_X_MAX_VEL* (souldDoubleXVel ? 2 : 1), ny*FIREBALL_Y_MAX_VEL);
+
+				// Add item into game world before its container
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddGameObjectBefore(this, fireball);
+			}
+
+			SetState(VENUS_FIRE_TRAP_STATE_FIRED);
+		}
+		
+	}
+
+	else if (state == VENUS_FIRE_TRAP_STATE_FIRED) {
 		if (GetTickCount64() - standStart >= VENUS_FIRE_TRAP_STAND_AMOUNT) {
 			SetState(VENUS_FIRE_TRAP_STATE_FALL);
 		}
@@ -26,8 +47,13 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	else if (state == VENUS_FIRE_TRAP_STATE_FALL_STAND) {
 		// Raise only when is it firable
-		if (GetTickCount64() - standStart >= VENUS_FIRE_TRAP_STAND_AMOUNT && IsFirable()) {
-			SetState(VENUS_FIRE_TRAP_STATE_BOUNCING);
+		if (GetTickCount64() - standStart >= VENUS_FIRE_TRAP_STAND_AMOUNT) {
+			float dx, dy;
+			GetDistanceWithPlayer(dx, dy);
+
+			if (abs(dx) >= VENUS_FIRE_TRAP_FIRABLE_MIN_DISTANCE) {
+				SetState(VENUS_FIRE_TRAP_STATE_BOUNCING);
+			}
 		}
 	}
 
@@ -102,10 +128,10 @@ void CVenusFireTrap::Render()
 
 void CVenusFireTrap::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - VENUS_FIRE_TRAP_BBOX_WIDTH / 2;
-	t = y - VENUS_FIRE_TRAP_BBOX_HEIGHT / 2;
-	r = l + VENUS_FIRE_TRAP_BBOX_WIDTH;
-	b = t + VENUS_FIRE_TRAP_BBOX_HEIGHT;
+	l = x - width / 2;
+	t = y - height / 2;
+	r = l + width;
+	b = t + height;
 }
 
 bool CVenusFireTrap::IsFirable() {
@@ -113,7 +139,7 @@ bool CVenusFireTrap::IsFirable() {
 	GetDistanceWithPlayer(dx, dy);
 
 	// Raise only when is it firable
-	if (abs(dx) >= VENUS_FIRE_TRAP_FIRABLE_DISTANCE_AMOUNT) {
+	if (abs(dx) <= VENUS_FIRE_TRAP_FIRABLE_MAX_DISTANCE) {
 		return true;
 	}
 
