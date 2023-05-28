@@ -11,10 +11,14 @@
 
 class CBrick : public CGameObject {
 public:
-	CBrick(float x, float y) : CGameObject(x, y) {}
+	// Constructor
+	CBrick(float x, float y) : CGameObject(x, y, BRICK_BBOX_WIDTH, BRICK_BBOX_HEIGHT) {}
+	
+	// Setters
+	void virtual SetState(int state);
+
+	// Logic function
 	void virtual Render();
 	void virtual Update(DWORD dt) {}
 	void virtual GetBoundingBox(float& left, float& top, float& right, float& bottom);
-
-	void virtual SetState(int state);
 };

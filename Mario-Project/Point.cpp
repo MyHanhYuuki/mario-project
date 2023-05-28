@@ -2,11 +2,6 @@
 #include "Sprites.h"
 #include "Utils.h"
 
-CPoint::CPoint(float x, float y): CGameObject(x, y) {
-	ay = 0;
-	point = 100;
-};
-
 void CPoint::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	vy += ay * dt;
 

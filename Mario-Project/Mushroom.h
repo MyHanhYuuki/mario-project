@@ -19,15 +19,16 @@
 
 class CMushroom : public CGameObject
 {
-protected:
-	float ay;
 public:
-	CMushroom(float x, float y);
-    void Render();
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void GetBoundingBox(float& l, float& t, float& r, float& b);
+	CMushroom(float x, float y) : CGameObject(x, y) {
+		blockDirection = BLOCK_NONE;
+	}
 
 	void SetState(int state);
+    
+	void Render();
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void GetBoundingBox(float& l, float& t, float& r, float& b);
 
     // When no collision has been detected (triggered by CCollision::Process)
 	virtual void OnNoCollision(DWORD dt);

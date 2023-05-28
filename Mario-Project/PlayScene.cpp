@@ -177,7 +177,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int width = atoi(tokens[3].c_str());
 		int height = atoi(tokens[4].c_str());
-		obj = new CInvisiblePlatform(x, y, object_type, width, height);
+		obj = new CInvisiblePlatform(x, y, width, height);
 		break;
 	}
 	case OBJECT_TYPE_PORTAL:
@@ -317,7 +317,7 @@ void CPlayScene::LoadMap(string filePath)
 
 			// Parse Platform and it's derived class
 			if ((int)name.rfind("Platform") >= 0 || name == "pipe") {
-				gameObject = new CInvisiblePlatform(name, x, y, OBJECT_TYPE_INVISIBLE_PLATFORM, width, height);
+				gameObject = new CInvisiblePlatform(name, x, y, width, height);
 			} else if (name == "Goomba") {
 				gameObject = new CGoomba(x, y);
 			} else if (name == "Coin") {

@@ -6,18 +6,6 @@
 #include "LifeMushRoom.h"
 #include "Leaf.h"
 
-CQuestionBrick::CQuestionBrick(float x, float y): CGameObject(x, y)
-{
-	Init();
-}
-
-void CQuestionBrick::Init() {
-	state = QUESTION_BRICK_STATE_NEW;
-
-	ax = 0;
-	ay = 0;
-}
-
 void CQuestionBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();

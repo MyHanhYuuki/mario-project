@@ -23,22 +23,26 @@ private:
 	int bounceState;
 	float bounceDelta;
 	DWORD startBounceTime;
-
-	float ax;
-	float ay;
-
 public:
-	CQuestionBrick(float x, float y);
-	void virtual Render();
-	void virtual Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
+	CQuestionBrick(float x, float y) : CGameObject(x, y)
+	{
+		Init();
+	}
+
+
 	void virtual GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	void virtual SetState(int state);
+	
+	void Init() {
+		state = QUESTION_BRICK_STATE_NEW;
+	}
+	void virtual Render();
+	void virtual Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 
 	//
 	// Collision ON or OFF ? This can change depending on object's state. For example: die
 	//
 	virtual int IsCollidable() { return state == QUESTION_BRICK_STATE_NEW || state == QUESTION_BRICK_STATE_EMPTY; };
 
-	void Init();
 };

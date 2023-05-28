@@ -14,18 +14,17 @@
 class CPoint : public CGameObject
 {
 private:
-	float ay;
-
 	int point;
-	
 	int GetSpriteID() { return POINT_BASE_ID + point; }
 public:
-	CPoint(float x, float y);
+	CPoint(float x, float y): CGameObject(x, y) {
+		point = 100;
+	};
+
+	void SetPoint(int point) { this->point = point; }
+	void SetState(int state);
 
 	void virtual Render();
 	void virtual Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void virtual GetBoundingBox(float& left, float& top, float& right, float& bottom) {}
-
-	void SetPoint(int point) { this->point = point; }
-	void SetState(int state);
 };

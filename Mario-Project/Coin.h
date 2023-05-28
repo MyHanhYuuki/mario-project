@@ -23,21 +23,20 @@
 
 class CCoin : public CGameObject {
 private:
-	float ay;
 	bool usedToBeBreakableBrick;
 	ULONGLONG lifeTime_start;
 public:
 	CCoin(float x, float y, bool wasBreakableBrick = false) : CGameObject(x, y)
 	{
-		ay = 0;
 		this->usedToBeBreakableBrick = wasBreakableBrick;
 		this->lifeTime_start = 0;
 		this->blockDirection = BLOCK_NONE;
 	}
+	
+	void SetState(int state);
+	
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-
 	void StartLiving() { this->lifeTime_start = GetTickCount64(); }
-	void SetState(int state);
 };

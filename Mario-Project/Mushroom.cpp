@@ -1,12 +1,6 @@
 #include "Mushroom.h"
-
 #include "Coin.h"
 #include "Utils.h"
-
-CMushroom::CMushroom(float x, float y) : CGameObject(x, y) {
-	blockDirection = BLOCK_NONE;
-	ay = 0;
-}
 
 void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

@@ -20,9 +20,6 @@
 class CGoomba : public CGameObject
 {
 protected:
-	float ax;				
-	float ay; 
-
 	ULONGLONG die_start;
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
@@ -36,6 +33,13 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public: 	
-	CGoomba(float x, float y);
+	CGoomba(float x, float y) : CGameObject(x, y)
+	{
+		this->ax = 0;
+		this->ay = GOOMBA_GRAVITY;
+		die_start = -1;
+		SetState(GOOMBA_STATE_WALKING);
+	}
+	
 	virtual void SetState(int state);
 };

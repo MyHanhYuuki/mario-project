@@ -2,12 +2,6 @@
 #include "Coin.h"
 #include "Utils.h"
 
-CLeaf::CLeaf(float x, float y) : CGameObject(x, y) {
-    blockDirection = BLOCK_NONE;
-	ay = 0;
-	nx = 1;
-}
-
 void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
