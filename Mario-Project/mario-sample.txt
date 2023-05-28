@@ -18,3 +18,4 @@ height	240
 30	textures\tiles.png
 40	textures\font-ui.png
 50	textures\misc1.png
+60	textures\pipe.png

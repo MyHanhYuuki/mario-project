@@ -316,7 +316,7 @@ void CPlayScene::LoadMap(string filePath)
 			}
 
 			// Parse Platform and it's derived class
-			if ((int)name.rfind("Platform") >= 0 || name == "pipe") {
+			if ((int)name.rfind("Platform") >= 0) {
 				gameObject = new CInvisiblePlatform(name, x, y, width, height);
 			} else if (name == "Goomba") {
 				gameObject = new CGoomba(x, y);
@@ -324,6 +324,8 @@ void CPlayScene::LoadMap(string filePath)
 				gameObject = new CCoin(x, y);
 			} else if ((int)name.rfind("QuestionBrick") >= 0) {
 				gameObject = new CQuestionBrick(x, y);
+			} else if ((int)name.rfind("Pipe") >= 0) {
+				gameObject = new CPipe(name, x, y, width, height);
 			}
 			
 			if (gameObject) {

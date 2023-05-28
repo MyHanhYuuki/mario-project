@@ -1,0 +1,13 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# full sprite, tail half
+80000	67	1	98	32	60
+80001	67	1	98	16	60
+80002	67	17	98	32	60
+
+80010	100	1	131	32	60
+80011	100	1	115	32	60
+80012	116	1	131	32	60
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
