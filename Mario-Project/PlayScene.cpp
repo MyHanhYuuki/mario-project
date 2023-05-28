@@ -16,6 +16,7 @@
 #include "Point.h"
 #include "Pipe.h"
 #include "VenusFireTrap.h"
+#include "FireBall.h"
 
 using namespace std;
 
@@ -329,6 +330,8 @@ void CPlayScene::LoadMap(string filePath)
 				gameObject = new CPipe(name, x, y, width, height);
 			} else if ((int)name.rfind("VenusFireTrap") >= 0) {
 				gameObject = new CVenusFireTrap(x, y);
+			} else if ((int)name.rfind("Fireball") >= 0) {
+				gameObject = new CFireBall(x, y);
 			}
 			
 			if (gameObject) {

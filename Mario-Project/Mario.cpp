@@ -13,7 +13,7 @@
 #include "LifeMushroom.h"
 #include "Leaf.h"
 #include "VenusFireTrap.h"
-
+#include "FireBall.h"
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -79,6 +79,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<CVenusFireTrap*>(e->obj)) {
 		OnCollisionWithVenueFireTrap(e);
+	}
+	else if (dynamic_cast<CFireBall*>(e->obj)) {
+		OnCollisionWithFireball(e);
 	}
 }
 
@@ -175,16 +178,26 @@ void CMario::OnCollisionWithVenueFireTrap(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithEnemy(LPCOLLISIONEVENT e)
 {
-	if (level > MARIO_LEVEL_SMALL)
-	{
-		level -= 1;
-		StartUntouchable();
+	if (untouchable == 0) {
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level -= 1;
+			StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
 	}
-	else
-	{
-		DebugOut(L">>> Mario DIE >>> \n");
-		SetState(MARIO_STATE_DIE);
-	}
+}
+
+void CMario::OnCollisionWithFireball(LPCOLLISIONEVENT e)
+{
+	auto fireball = dynamic_cast<CFireBall*>(e->obj);
+	if (fireball->IsFromPlayer()) return;
+
+	OnCollisionWithEnemy(e);
 }
 
 //
