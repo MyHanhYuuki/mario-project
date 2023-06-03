@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <vector>
+#include <deque>
 #include <algorithm>
 
 using namespace std;
@@ -36,6 +37,10 @@ struct CCollisionEvent
 	}
 
 	int WasCollided() { return t >= 0.0f && t <= 1.0f; }
+	bool IsVerticalCollision() { return ny != 0; }
+	bool IsHorizontalCollision() { return nx != 0; }
+	bool IsBothCollision() { return IsHorizontalCollision() && IsVerticalCollision(); }
+	bool ShouldBeIgnored() { return isDeleted; }
 
 	static bool compare(const LPCOLLISIONEVENT& a, LPCOLLISIONEVENT& b)
 	{
@@ -45,7 +50,10 @@ struct CCollisionEvent
 
 class CCollision
 {
+private:
 	static CCollision* __instance;
+
+	void ProcessBlockingCollision(LPGAMEOBJECT objSrc, DWORD dt, deque<LPCOLLISIONEVENT>& coEvents);
 public: 
 	static void SweptAABB(
 		float ml,			// move left 
@@ -70,16 +78,16 @@ public:
 		LPGAMEOBJECT objSrc, 
 		DWORD dt, 
 		vector<LPGAMEOBJECT>* objDests, 
-		vector<LPCOLLISIONEVENT>& coEvents);
+		deque<LPCOLLISIONEVENT>& coEvents);
 
 	void Filter(
 		LPGAMEOBJECT objSrc,
-		vector<LPCOLLISIONEVENT>& coEvents,
+		deque<LPCOLLISIONEVENT>& coEvents,
 		LPCOLLISIONEVENT &colX,
 		LPCOLLISIONEVENT &colY, 
-		int filterBlock,		
-		int filterX,
-		int filterY);
+		bool shouldIgnoreNonBlocking,		
+		bool shouldIncludeHorizontalCollision,
+		bool shouldIncludeVerticalCollision);
 
 	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 

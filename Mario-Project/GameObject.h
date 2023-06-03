@@ -109,6 +109,7 @@ public:
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return blockDirection != BLOCK_NONE; }
 	int GetBlockDirection() { return this->blockDirection; }
+	bool IsMoving() { return vx != 0 || vy != 0; }
 
 	// Setters
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
