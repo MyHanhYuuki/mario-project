@@ -1,0 +1,27 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#move left
+100000	28	67	43	92	11
+100001	47	66	62	92	11
+#move right
+100002	215	67	230	92	11
+100003	234	66	249	92	11
+#shell
+100004	29	97	44	112	11
+100005	71	75	88	90	11
+#shell move
+100006	50	96	65	115	11
+100007	71	96	86	115	11
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#move left
+11003	100000	100	100001	100
+#move right
+11004	100002	100	100003	100
+#shell
+11005	100004	10
+#shell move
+11006	100006	20	100007	20
+#shell tranform
+11007	100006	60	100005	60

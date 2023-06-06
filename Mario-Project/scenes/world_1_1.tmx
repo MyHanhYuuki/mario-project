@@ -133,7 +133,7 @@
   <object id="135" name="QuestionBrick" x="416" y="320">
    <point/>
   </object>
-  <object id="136" name="QuestionBrick" x="654" y="392">
+  <object id="136" name="LevelupQuestionBrick" x="654" y="392">
    <point/>
   </object>
   <object id="137" name="QuestionBrick" x="704" y="352">
@@ -150,6 +150,9 @@
   <object id="105" name="VerticalPipe" x="2256" y="112" width="32" height="192"/>
   <object id="106" name="VerticalPipe" x="2320" y="384" width="32" height="32"/>
   <object id="102" name="VenusFireTrapVerticalPipe" x="352" y="368" width="32" height="48"/>
+  <object id="145" name="Koopa" x="576" y="352">
+   <point/>
+  </object>
  </objectgroup>
  <layer id="1" name="Background" width="220" height="90">
   <properties>

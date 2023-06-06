@@ -14,6 +14,7 @@
 #include "Leaf.h"
 #include "VenusFireTrap.h"
 #include "FireBall.h"
+#include "Koopa.h"
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -80,8 +81,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CVenusFireTrap*>(e->obj)) {
 		OnCollisionWithVenueFireTrap(e);
 	}
-	else if (dynamic_cast<CFireBall*>(e->obj)) {
-		OnCollisionWithFireball(e);
+	else if (dynamic_cast<CKoopa*>(e->obj)) {
+		OnCollisionWithKoopa(e);
 	}
 }
 
@@ -198,6 +199,36 @@ void CMario::OnCollisionWithFireball(LPCOLLISIONEVENT e)
 	if (fireball->IsFromPlayer()) return;
 
 	OnCollisionWithEnemy(e);
+}
+
+void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	// jump on top
+	if (e->ny < 0)
+	{
+		// Turn it into a shell
+		koopa->OnDamaged(e, this);
+
+		// Deflect
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+
+		// Emit event
+		FireGainPointEvent(koopa->GetPosX(), koopa->GetPosY() - koopa->GetHeight());
+	}
+	else // hit by koopa
+	{
+		if (koopa->GetState() == KOOPA_STATE_WALKING || koopa->GetState() == KOOPA_STATE_SHELL_MOVING)
+		{
+			if (untouchable == 0)
+			{
+				OnCollisionWithEnemy(e);
+			}
+		} else {
+			koopa->OnDamaged(e, this);
+		}
+	}
 }
 
 //

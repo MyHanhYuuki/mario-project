@@ -9,11 +9,11 @@
 #include "Sprites.h"
 #include "Collision.h"
 #include "AssetIDs.h"
+#include "const.h"
 
 using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
-#define BBOX_ALPHA 0.0f		// Bounding box transparency
 
 class CGameObject
 {
@@ -53,7 +53,7 @@ public:
 		width = height = 0;
 		vx = vy = 0;
 		ax = ay = 0;
-		nx = ny = 1;	
+		nx = ny = 1;
 		state = -1;
 		isDeleted = false;
 		blockDirection = BLOCK_ALL;
@@ -82,6 +82,10 @@ public:
 		left = x + width / 2;
 		top = y + height / 2;
 	}
+	int GetWidth() { return width; }
+	int GetHeight() { return height; }
+	float GetPosX() { return x; }
+	float GetPosY() { return y; }
 
 	// Setters
 	void SetName(string name) { this->name = name; }

@@ -153,6 +153,7 @@ class CMario : public CGameObject
 	void OnCollisionWithVenueFireTrap(LPCOLLISIONEVENT e);
 	void OnCollisionWithEnemy(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireball(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 
 	int GetAniIdTanuki();
 	int GetAniIdBig();

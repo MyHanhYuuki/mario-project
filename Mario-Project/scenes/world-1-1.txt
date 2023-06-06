@@ -10,6 +10,7 @@ item.txt
 pipe.txt
 venus_fire_trap.txt
 fireball.txt
+koopa.txt
 
 [TILEMAP]
 scenes\world_1_1.tmx
@@ -20,4 +21,4 @@ scenes\world_1_1.tmx
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	240	369
+0	480	384

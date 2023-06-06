@@ -17,6 +17,7 @@
 #include "Pipe.h"
 #include "VenusFireTrap.h"
 #include "FireBall.h"
+#include "Koopa.h"
 
 using namespace std;
 
@@ -332,6 +333,8 @@ void CPlayScene::LoadMap(string filePath)
 				gameObject = new CVenusFireTrap(x, y);
 			} else if ((int)name.rfind("Fireball") >= 0) {
 				gameObject = new CFireBall(x, y);
+			} else if ((int)name.rfind("Koopa") >= 0) {
+				gameObject = new CKoopa(x, y);
 			}
 			
 			if (gameObject) {

@@ -142,6 +142,7 @@
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
+    <None Include="scenes\world_1_1.tmx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="InvisiblePlatform.h" />
     <ClInclude Include="KeyEventHandler.h" />
+    <ClInclude Include="Koopa.h" />
     <ClInclude Include="Leaf.h" />
     <ClInclude Include="LifeMushRoom.h" />
     <ClInclude Include="Mario.h" />
@@ -194,6 +196,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="InvisiblePlatform.cpp" />
+    <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="Leaf.cpp" />
     <ClCompile Include="LifeMushRoom.cpp" />
     <ClCompile Include="main.cpp" />
@@ -216,6 +219,28 @@
     <ClCompile Include="tinyxmlparser.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VenusFireTrap.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\brick.txt" />
+    <Text Include="assets\cloud.txt" />
+    <Text Include="assets\coin.txt" />
+    <Text Include="assets\fireball.txt" />
+    <Text Include="assets\font.txt" />
+    <Text Include="assets\goomba.txt" />
+    <Text Include="assets\item.txt" />
+    <Text Include="assets\koopa.txt" />
+    <Text Include="assets\mario.txt" />
+    <Text Include="assets\pipe.txt" />
+    <Text Include="assets\platform.txt" />
+    <Text Include="assets\venus_fire_trap.txt" />
+    <Text Include="mario-sample.txt" />
+    <Text Include="scenes\world-1-1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="scenes\world_1_1.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="scenes\world-1-1.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
