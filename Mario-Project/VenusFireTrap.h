@@ -23,7 +23,7 @@
 class CVenusFireTrap : public CGameObject
 {
 private:
-	DWORD standStart;
+	ULONGLONG standStart;
 
 	int GetSpriteID();
 	void GetDistanceWithPlayer(float &dx, float &dy);
