@@ -86,6 +86,8 @@ public:
 	int GetHeight() { return height; }
 	float GetPosX() { return x; }
 	float GetPosY() { return y; }
+	virtual int GetAnimationID() { return -1; }
+	virtual D3DXMATRIX* GetCustomTranformationMatrix() { return NULL; }
 
 	// Setters
 	void SetName(string name) { this->name = name; }
@@ -94,7 +96,16 @@ public:
 	// Logic handler
 	virtual void Init() {};
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
-	virtual void Render() = 0;
+	virtual void Render()
+	{
+		RenderBoundingBox();
+
+		auto aniID = GetAnimationID();
+		auto matCustomTranformation = GetCustomTranformationMatrix();
+
+		CAnimations::GetInstance()->Get(aniID)->Render(x, y, matCustomTranformation);
+	}
+
 	virtual void Delete() { isDeleted = true; }
 
 	// Deconstructor

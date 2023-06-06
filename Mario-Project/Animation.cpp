@@ -14,7 +14,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(float x, float y)
+void CAnimation::Render(float x, float y, D3DXMATRIX* matCustomTranformation)
 {
 	ULONGLONG now = GetTickCount64();
 	if (currentFrame == -1)
@@ -34,6 +34,6 @@ void CAnimation::Render(float x, float y)
 
 	}
 
-	frames[currentFrame]->GetSprite()->Draw(x, y);
+	frames[currentFrame]->GetSprite()->Draw(x, y, matCustomTranformation);
 }
 

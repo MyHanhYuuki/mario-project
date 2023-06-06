@@ -13,6 +13,7 @@
 
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
+#define GOOMBA_STATE_DIE_ON_COLLISION 300
 
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
@@ -22,17 +23,35 @@ class CGoomba : public CGameObject
 protected:
 	ULONGLONG die_start;
 
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
-	virtual void Render();
+	// Getters
+	virtual int IsCollidable() { return state == GOOMBA_STATE_WALKING; };
+	virtual int IsBlocking() { return state == GOOMBA_STATE_WALKING; }
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual int GetAnimationID()
+	{
+		int aniId = ID_ANI_GOOMBA_WALKING;
 
-	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { return 0; }
+		if (state == GOOMBA_STATE_DIE) {
+			aniId = ID_ANI_GOOMBA_DIE;
+		}
+
+		return aniId;
+	}
+	virtual D3DXMATRIX* GetCustomTranformationMatrix()
+	{
+		D3DXMATRIX result;
+		if (state == GOOMBA_STATE_DIE_ON_COLLISION) {
+			result = CGame::GetInstance()->GetTranformMatrixForCollisionDeflect(x, y);
+		}
+
+		return NULL;
+	}
+
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void OnNoCollision(DWORD dt);
-
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-
-public: 	
+public:
+	// Constructors
 	CGoomba(float x, float y) : CGameObject(x, y)
 	{
 		this->ax = 0;
@@ -40,6 +59,7 @@ public:
 		die_start = -1;
 		SetState(GOOMBA_STATE_WALKING);
 	}
-	
+
+	// Setters
 	virtual void SetState(int state);
 };

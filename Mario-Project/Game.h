@@ -106,6 +106,27 @@ public:
 
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
+	D3DXVECTOR2* GetCorrectedDrawLocation(float x, float y) {
+		// Get camera position
+		float cx, cy;
+		GetCamPos(cx, cy);
+
+		// Adjust draw location
+		x = (FLOAT)floor(x);
+		y = (FLOAT)floor(y);
+
+		cx = (FLOAT)floor(cx);
+		cy = (FLOAT)floor(cy);
+
+		// Tranform draw location
+		return new D3DXVECTOR2(x - cx, GetBackBufferHeight() - y + cy);
+	}
+	D3DXMATRIX GetTranformMatrixForCollisionDeflect(float x, float y) {
+		D3DXMATRIX result;
+		D3DXMatrixTransformation2D(&result, NULL, NULL, NULL, GetCorrectedDrawLocation(x, y), (float)D3DXToRadian(-45), NULL);
+
+		return result;
+	}
 
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 	void Load(LPCWSTR gameFile);
