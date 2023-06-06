@@ -27,7 +27,6 @@ void CGoomba::OnNoCollision(DWORD dt)
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return; 
-	if (dynamic_cast<CGoomba*>(e->obj)) return; 
 
 	if (e->ny != 0 )
 	{
@@ -37,6 +36,11 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
+}
+
+void CGoomba::OnDamaged(LPCOLLISIONEVENT e)
+{
+	SetState(GOOMBA_STATE_DIE);
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -66,7 +70,7 @@ void CGoomba::SetState(int state)
 	{
 		case GOOMBA_STATE_DIE:
 			die_start = GetTickCount64();
-			y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE)/2;
+			y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE)/2.0f;
 			vx = 0;
 			vy = 0;
 			ay = 0; 

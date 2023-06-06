@@ -95,7 +95,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		// jump on top >> kill Goomba and deflect a bit 
 		if (e->ny < 0)
 		{
-			goomba->SetState(GOOMBA_STATE_DIE);
+			goomba->OnDamaged(e);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 
 			float xx, yy;
@@ -563,7 +563,7 @@ void CMario::SetLevel(int l)
 	// Adjust position to avoid falling off platform
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
-		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2.0;
 	}
 	level = l;
 }

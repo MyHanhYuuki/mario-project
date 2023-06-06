@@ -62,4 +62,7 @@ public:
 
 	// Setters
 	virtual void SetState(int state);
+
+	// Collision related
+	virtual void OnDamaged(LPCOLLISIONEVENT e);
 };

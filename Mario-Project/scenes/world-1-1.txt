@@ -21,4 +21,4 @@ scenes\world_1_1.tmx
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	480	384
+0	240	369

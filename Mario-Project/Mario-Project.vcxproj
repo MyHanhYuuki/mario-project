@@ -166,6 +166,7 @@
     <ClInclude Include="LifeMushRoom.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Mushroom.h" />
+    <ClInclude Include="ParaGoomba.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Mushroom.cpp" />
+    <ClCompile Include="ParaGoomba.cpp" />
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayScene.cpp" />
@@ -241,6 +243,15 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="scenes\world-1-1.png" />
+    <Image Include="textures\bbox.png" />
+    <Image Include="textures\enemies.png" />
+    <Image Include="textures\font-ui.png" />
+    <Image Include="textures\mario.png" />
+    <Image Include="textures\misc.png" />
+    <Image Include="textures\misc1.png" />
+    <Image Include="textures\modified_enemy.png" />
+    <Image Include="textures\pipe.png" />
+    <Image Include="textures\tiles.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
