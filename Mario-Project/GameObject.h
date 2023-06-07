@@ -125,6 +125,7 @@ public:
 	virtual int IsBlocking() { return blockDirection != BLOCK_NONE; }
 	int GetBlockDirection() { return this->blockDirection; }
 	bool IsMoving() { return vx != 0 || vy != 0; }
+	virtual bool CanGetThroughtOnCollision() { return false; }
 
 	// Setters
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }

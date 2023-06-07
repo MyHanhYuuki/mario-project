@@ -10,6 +10,7 @@
 #define GOOMBA_BBOX_HEIGHT_DIE 7
 
 #define GOOMBA_DIE_TIMEOUT 500
+#define GOOMBA_DIE_ON_COLLISION_TIMEOUT 300
 
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
@@ -39,9 +40,8 @@ protected:
 	}
 	virtual D3DXMATRIX* GetCustomTranformationMatrix()
 	{
-		D3DXMATRIX result;
 		if (state == GOOMBA_STATE_DIE_ON_COLLISION) {
-			result = CGame::GetInstance()->GetTranformMatrixForCollisionDeflect(x, y);
+			return CGame::GetInstance()->GetTranformMatrixForCollisionDeflect(x, y);
 		}
 
 		return NULL;
@@ -65,4 +65,5 @@ public:
 
 	// Collision related
 	virtual void OnDamaged(LPCOLLISIONEVENT e);
+	virtual bool CanGetThroughtOnCollision() { return true; }
 };

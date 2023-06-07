@@ -14,5 +14,5 @@
 
 // Speed
 // TODO: adjust
-#define VEL_X_COLLISION_DEFLECT 0.2f
+#define VEL_X_COLLISION_DEFLECT 0.1f
 #define VEL_Y_COLLISION_DEFLECT -0.1f

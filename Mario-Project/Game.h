@@ -121,11 +121,11 @@ public:
 		// Tranform draw location
 		return new D3DXVECTOR2(x - cx, GetBackBufferHeight() - y + cy);
 	}
-	D3DXMATRIX GetTranformMatrixForCollisionDeflect(float x, float y) {
+	D3DXMATRIX* GetTranformMatrixForCollisionDeflect(float x, float y) {
 		D3DXMATRIX result;
-		D3DXMatrixTransformation2D(&result, NULL, NULL, NULL, GetCorrectedDrawLocation(x, y), (float)D3DXToRadian(-45), NULL);
+		D3DXMatrixTransformation2D(&result, NULL, NULL, NULL, GetCorrectedDrawLocation(x, y), (float)D3DXToRadian(-180), NULL);
 
-		return result;
+		return new D3DXMATRIX(result);
 	}
 
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }

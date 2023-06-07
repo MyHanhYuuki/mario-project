@@ -33,16 +33,16 @@ void CKoopa::OnNoCollision(DWORD dt)
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CKoopa*>(e->obj)) return; 
-
 	if (e->ny != 0 )
 	{
 		vy = 0;
 	}
 	else if (e->nx != 0)
 	{
-		vx = -vx;
-		nx = -nx;
+		if (e->obj->CanGetThroughtOnCollision() == false) {
+			vx = -vx;
+			nx = -nx;
+		}
 	}
 
 	if (dynamic_cast<CInvisiblePlatform*>(e->obj)) {

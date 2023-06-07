@@ -53,7 +53,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		isDeleted = true;
 		return;
 	}
-	else if ( state== GOOMBA_STATE_DIE_ON_COLLISION && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
+	else if ( state== GOOMBA_STATE_DIE_ON_COLLISION && (GetTickCount64() - die_start > GOOMBA_DIE_ON_COLLISION_TIMEOUT) )
 	{
 		isDeleted = true;
 		return;
