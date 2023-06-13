@@ -21,6 +21,7 @@
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
+#define MARIO_STATE_KICK			1
 #define MARIO_STATE_WALKING_RIGHT	100
 #define MARIO_STATE_WALKING_LEFT	200
 
@@ -39,6 +40,8 @@
 // TANUKI
 #define ID_ANI_MARIO_TANUKI_IDLE_RIGHT 20400
 #define ID_ANI_MARIO_TANUKI_IDLE_LEFT 20401
+#define ID_ANI_MARIO_TANUKI_KICK_RIGHT 20402
+#define ID_ANI_MARIO_TANUKI_KICK_LEFT 20403
 
 #define ID_ANI_MARIO_TANUKI_WALKING_RIGHT 20500
 #define ID_ANI_MARIO_TANUKI_WALKING_LEFT 20501
@@ -61,6 +64,8 @@
 // BIG MARIO
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
+#define ID_ANI_MARIO_KICK_RIGHT 402
+#define ID_ANI_MARIO_KICK_LEFT 403
 
 #define ID_ANI_MARIO_WALKING_RIGHT 500
 #define ID_ANI_MARIO_WALKING_LEFT 501
@@ -85,6 +90,8 @@
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT 1103
+#define ID_ANI_MARIO_SMALL_KICK_LEFT 1104
 
 #define ID_ANI_MARIO_SMALL_WALKING_RIGHT 1200
 #define ID_ANI_MARIO_SMALL_WALKING_LEFT 1201
@@ -132,6 +139,11 @@
 
 class CMario : public CGameObject
 {
+	// Kicking related
+	const int KICH_TIMEOUT = 150;
+	ULONGLONG kickStart;
+	bool isKicking;
+	
 	BOOLEAN isSitting;
 	float maxVx;
 
@@ -164,6 +176,7 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		isKicking = false;
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;

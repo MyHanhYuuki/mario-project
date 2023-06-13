@@ -339,6 +339,19 @@ void CPlayScene::LoadMap(string filePath)
 			} else if ((int)name.rfind("ParaGoomba") >= 0) {
 				gameObject = new CParaGoomba(x, y);
 			}
+			else if ((int)name.rfind("Mario") >= 0) {
+				if (player != NULL)
+				{
+					DebugOut(L"[ERROR] MARIO object was created before!\n");
+					return;
+				}
+				gameObject = new CMario(x, y);
+				player = (CMario*)gameObject;
+
+				DebugOut(L"[INFO] Player object has been created!\n");
+
+				MakeCameraFollowMario();
+			}
 			
 			if (gameObject) {
 				gameObject->SetName(name);

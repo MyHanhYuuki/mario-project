@@ -30,6 +30,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+	// Kicking? then become
+	if (GetTickCount64() - kickStart > KICH_TIMEOUT) {
+		kickStart = 0;
+		isKicking = false;
+	}
 
 	isOnPlatform = false;
 
@@ -225,7 +230,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 				OnCollisionWithEnemy(e);
 			}
 		} else {
+			// Kich shell? hold shell?
 			koopa->OnDamaged(e, this);
+			SetState(MARIO_STATE_KICK);
 		}
 	}
 }
@@ -269,7 +276,10 @@ int CMario::GetAniIdSmall()
 			}
 			else if (vx > 0)
 			{
-				if (ax < 0)
+				if (isKicking) {
+					aniId = ID_ANI_MARIO_SMALL_KICK_RIGHT;
+				}
+				else if (ax < 0)
 					aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
 				else if (ax == MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
@@ -278,7 +288,10 @@ int CMario::GetAniIdSmall()
 			}
 			else // vx < 0
 			{
-				if (ax > 0)
+				if (isKicking) {
+					aniId = ID_ANI_MARIO_SMALL_KICK_LEFT;
+				}
+				else if (ax > 0)
 					aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
 				else if (ax == -MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
@@ -331,7 +344,10 @@ int CMario::GetAniIdBig()
 			}
 			else if (vx > 0)
 			{
-				if (ax < 0)
+				if (isKicking) {
+					aniId = ID_ANI_MARIO_KICK_RIGHT;
+				}
+				else if (ax < 0)
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
 				else if (ax == MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_RIGHT;
@@ -340,7 +356,10 @@ int CMario::GetAniIdBig()
 			}
 			else // vx < 0
 			{
-				if (ax > 0)
+				if (isKicking) {
+					aniId = ID_ANI_MARIO_KICK_LEFT;
+				}
+				else if (ax > 0)
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
 				else if (ax == -MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_LEFT;
@@ -392,7 +411,10 @@ int CMario::GetAniIdTanuki()
 			}
 			else if (vx > 0)
 			{
-				if (ax < 0)
+				if (isKicking) {
+					aniId = ID_ANI_MARIO_TANUKI_KICK_RIGHT;
+				}
+				else if (ax < 0)
 					aniId = ID_ANI_MARIO_TANUKI_BRACE_RIGHT;
 				else if (ax == MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_TANUKI_RUNNING_RIGHT;
@@ -401,7 +423,10 @@ int CMario::GetAniIdTanuki()
 			}
 			else // vx < 0
 			{
-				if (ax > 0)
+				if (isKicking) {
+					aniId = ID_ANI_MARIO_TANUKI_KICK_LEFT;
+				}
+				else if (ax > 0)
 					aniId = ID_ANI_MARIO_TANUKI_BRACE_LEFT;
 				else if (ax == -MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_TANUKI_RUNNING_LEFT;
@@ -507,6 +532,10 @@ void CMario::SetState(int state)
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
+		break;
+	case MARIO_STATE_KICK:
+		kickStart = GetTickCount64();
+		isKicking = true;
 		break;
 	}
 
