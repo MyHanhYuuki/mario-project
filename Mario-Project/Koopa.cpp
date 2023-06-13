@@ -5,7 +5,7 @@
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	vy += ay * dt;
+	vy += isBeingHold ? 0 : ay * dt;
 	vx += ax * dt;
 
 	if (state == KOOPA_STATE_SHELL) {
@@ -154,8 +154,7 @@ void CKoopa::SetState(int state)
 		case KOOPA_STATE_WALKING:
 			y += (height - KOOPA_BBOX_HEIGHT_SHELL) / 2;
 			height = KOOPA_BBOX_HEIGHT;
-			nx = -1;
-			vx = -KOOPA_WALKING_SPEED;
+			vx = nx * KOOPA_WALKING_SPEED;
 			break;
 		case KOOPA_STATE_SHELL:
 			vx = 0;
@@ -166,8 +165,9 @@ void CKoopa::SetState(int state)
 			break;
 		case KOOPA_STATE_SHELL_MOVING:
 			y += (height - KOOPA_BBOX_HEIGHT_SHELL) / 2;
-			vx = -KOOPA_SHELL_MOVING_SPEED;
+			vx = nx * KOOPA_SHELL_MOVING_SPEED;
 			height = KOOPA_BBOX_HEIGHT_SHELL;
+			isBeingHold = false;
 			break;
 		case KOOPA_STATE_SHELL_TRANFORM:
 			onShellStart = GetTickCount64();

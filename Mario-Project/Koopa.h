@@ -31,6 +31,7 @@
 class CKoopa : public CGameObject
 {
 private:
+	bool isBeingHold;
 	bool isOnFlatform;
 	DWORD64 onShellStart;
 
@@ -44,6 +45,7 @@ public:
 		this->ax = 0;
 		this->ay = KOOPA_GRAVITY;
 		this->isOnFlatform = false;
+		this->isBeingHold = false;
 		
 		// TODO: set dynamicly base on koppa type (from name)
 		this->height = KOOPA_BBOX_HEIGHT;
@@ -58,10 +60,11 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { return 1; }
+	virtual int IsCollidable() { return !isBeingHold; };
+	virtual int IsBlocking() { return !isBeingHold; }
 
 	virtual void SetState(int state);
+	virtual void SetBeingHold(bool isBeingHold) { this->isBeingHold = isBeingHold; }
 
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);

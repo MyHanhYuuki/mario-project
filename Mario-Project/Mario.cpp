@@ -30,10 +30,31 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+
 	// Kicking? then become
 	if (GetTickCount64() - kickStart > KICH_TIMEOUT) {
 		kickStart = 0;
 		isKicking = false;
+	}
+
+	// Holding?
+	if (isHolding) {
+		// Update holding item position
+		if (CGame::GetInstance()->IsKeyDown(DIK_A)) {
+			// Location = center point + offset (= direction indicator value multiply by hold object width)
+			auto holdPosX = (x - GetWidth() / 2) + (nx * (holdItem->GetWidth() + HOLD_X_OFFSET));
+			auto holdPosY = y - holdItem->GetHeight() / 2 + (level == MARIO_LEVEL_SMALL ? HOLD_X_OFFSET : 0);
+
+			holdItem->SetPosition(holdPosX, holdPosY);
+		}
+
+		// Kick it away
+		else {
+			isHolding = false;
+
+			holdItem->SetHorizontalDirection(nx);
+			holdItem->SetState(KOOPA_STATE_SHELL_MOVING);
+		}
 	}
 
 	isOnPlatform = false;
@@ -230,9 +251,19 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 				OnCollisionWithEnemy(e);
 			}
 		} else {
-			// Kich shell? hold shell?
-			koopa->OnDamaged(e, this);
-			SetState(MARIO_STATE_KICK);
+			// hold shell?
+			if (CGame::GetInstance()->IsKeyDown(DIK_A)) {
+				isHolding = true;
+				holdItem  = koopa;
+
+				koopa->SetBeingHold(true);
+			}
+			
+			// Kich shell?
+			else {
+				SetState(MARIO_STATE_KICK);
+				koopa->OnDamaged(e, this);
+			}
 		}
 	}
 }
@@ -441,6 +472,8 @@ int CMario::GetAniIdTanuki()
 
 void CMario::Render()
 {
+	RenderBoundingBox();
+
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 
@@ -454,8 +487,6 @@ void CMario::Render()
 		aniId = GetAniIdTanuki();
 
 	animations->Get(aniId)->Render(x, y);
-
-	//RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -544,47 +575,45 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (level==MARIO_LEVEL_BIG)
+	width = GetWidth();
+	height = GetHeight();
+
+	left = x - width / 2;
+	top = y - height / 2;
+	right = left + width;
+	bottom = top + height;
+}
+
+int CMario::GetWidth()
+{
+	int width = MARIO_SMALL_BBOX_WIDTH;
+
+	if (level == MARIO_LEVEL_BIG)
 	{
-		if (isSitting)
-		{
-			left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
-			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
-			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
-			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
-		}
-		else 
-		{
-			left = x - MARIO_BIG_BBOX_WIDTH/2;
-			top = y - MARIO_BIG_BBOX_HEIGHT/2;
-			right = left + MARIO_BIG_BBOX_WIDTH;
-			bottom = top + MARIO_BIG_BBOX_HEIGHT;
-		}
+		width = isSitting ? MARIO_BIG_SITTING_BBOX_WIDTH : MARIO_BIG_BBOX_WIDTH;
 	}
-	else if (level==MARIO_LEVEL_TANUKI)
+	else if (level == MARIO_LEVEL_TANUKI)
 	{
-		if (isSitting)
-		{
-			left = x - MARIO_TANUKI_SITTING_BBOX_WIDTH / 2;
-			top = y - MARIO_TANUKI_SITTING_BBOX_HEIGHT / 2;
-			right = left + MARIO_TANUKI_SITTING_BBOX_WIDTH;
-			bottom = top + MARIO_TANUKI_SITTING_BBOX_HEIGHT;
-		}
-		else 
-		{
-			left = x - MARIO_TANUKI_BBOX_WIDTH/2;
-			top = y - MARIO_TANUKI_BBOX_HEIGHT/2;
-			right = left + MARIO_TANUKI_BBOX_WIDTH;
-			bottom = top + MARIO_TANUKI_BBOX_HEIGHT;
-		}
+		width = isSitting ? MARIO_TANUKI_SITTING_BBOX_WIDTH : MARIO_BIG_BBOX_WIDTH;
 	}
-	else
+
+	return width;
+}
+
+int CMario::GetHeight()
+{
+	int height = MARIO_SMALL_BBOX_HEIGHT;
+
+	if (level == MARIO_LEVEL_BIG)
 	{
-		left = x - MARIO_SMALL_BBOX_WIDTH/2;
-		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
-		right = left + MARIO_SMALL_BBOX_WIDTH;
-		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+		height = isSitting ? MARIO_BIG_SITTING_BBOX_HEIGHT : MARIO_BIG_BBOX_HEIGHT;
 	}
+	else if (level == MARIO_LEVEL_TANUKI)
+	{
+		height = isSitting ? MARIO_TANUKI_SITTING_BBOX_HEIGHT : MARIO_BIG_BBOX_HEIGHT;
+	}
+
+	return height;
 }
 
 void CMario::SetLevel(int l)

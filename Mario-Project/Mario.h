@@ -112,9 +112,6 @@
 
 #define GROUND_Y 160.0f
 
-
-
-
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_TANUKI	3
@@ -139,8 +136,14 @@
 
 class CMario : public CGameObject
 {
+	// Holding related
+	LPGAMEOBJECT holdItem;
+	bool isHolding;
+	const float HOLD_X_OFFSET = -2.0f;
+	const float HOLD_Y_OFFSET = -2.0f;
+
 	// Kicking related
-	const int KICH_TIMEOUT = 150;
+	const int KICH_TIMEOUT = 160;
 	ULONGLONG kickStart;
 	bool isKicking;
 	
@@ -174,39 +177,45 @@ class CMario : public CGameObject
 	void FireGainPointEvent(float x, float y, int point=100);
 
 public:
+	// Constructors
 	CMario(float x, float y) : CGameObject(x, y)
 	{
-		isKicking = false;
-		isSitting = false;
-		maxVx = 0.0f;
-		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
-
-		level = MARIO_LEVEL_BIG;
-		untouchable = 0;
+		holdItem		  = NULL;
+		isHolding		  = false;
+		isKicking		  = false;
+		isSitting		  = false;
+		maxVx			  = 0.0f;
+		ax				  = 0.0f;
+		ay				  = MARIO_GRAVITY; 
+		level			  = MARIO_LEVEL_BIG;
+		untouchable		  = 0;
 		untouchable_start = -1;
-		isOnPlatform = false;
-		coin = 0;
+		isOnPlatform	  = false;
+		coin			  = 0;
 	}
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void Render();
-	void SetState(int state);
-
+	
+	// Getters
 	int IsCollidable()
-	{ 
-		return (state != MARIO_STATE_DIE); 
+	{
+		return (state != MARIO_STATE_DIE);
 	}
-
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
-
+	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 	bool IsStopUpdate() { return isStopUpdate; }
-
-	void OnNoCollision(DWORD dt);
-	void OnCollisionWith(LPCOLLISIONEVENT e);
-
-	void SetLevel(int l);
 	int GetLevel() { return level; }
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	int GetWidth();
+	int GetHeight();
+
+	// Setters
+	void SetState(int state);
+	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	// Logic
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
+
+	// Collision related
+	void OnNoCollision(DWORD dt);
+	void OnCollisionWith(LPCOLLISIONEVENT e);
 };

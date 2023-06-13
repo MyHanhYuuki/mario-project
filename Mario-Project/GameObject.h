@@ -92,6 +92,8 @@ public:
 	// Setters
 	void SetName(string name) { this->name = name; }
 	virtual void SetState(int state) { this->state = state; }
+	void SetHorizontalDirection(int nx) { this->nx = nx; }
+	void SetVerticalDirection(int ny) { this->ny = ny; }
 
 	// Logic handler
 	virtual void Init() {};
