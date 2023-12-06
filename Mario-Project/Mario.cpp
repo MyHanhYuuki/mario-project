@@ -470,11 +470,8 @@ int CMario::GetAniIdTanuki()
 	return aniId;
 }
 
-void CMario::Render()
+int CMario::GetAnimationID()
 {
-	RenderBoundingBox();
-
-	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 
 	if (state == MARIO_STATE_DIE)
@@ -486,7 +483,7 @@ void CMario::Render()
 	else if (level == MARIO_LEVEL_TANUKI)
 		aniId = GetAniIdTanuki();
 
-	animations->Get(aniId)->Render(x, y);
+	return aniId;
 }
 
 void CMario::SetState(int state)
@@ -575,11 +572,18 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	width = GetWidth();
-	height = GetHeight();
+	if (IsHasAnimation()) {
+		LPSPRITE curSprite = GetCurrentAnimation()->GetCurrentAnimationFrame()->GetSprite();
+		width = curSprite->GetWidth();
+		height = curSprite->GetHeight();
+	}
+	else {
+		width = GetWidth();
+		height = GetHeight();
+	}
 
-	left = x - width / 2;
-	top = y - height / 2;
+	left = x;
+	top = y;
 	right = left + width;
 	bottom = top + height;
 }

@@ -88,6 +88,16 @@ public:
 	float GetPosY() { return y; }
 	virtual int GetAnimationID() { return -1; }
 	virtual D3DXMATRIX* GetCustomTranformationMatrix() { return NULL; }
+	LPANIMATION GetCurrentAnimation()
+	{
+		int aniID = GetAnimationID();
+		if (aniID > -1) {
+			return CAnimations::GetInstance()->Get(aniID);
+		}
+
+		return nullptr;
+	}
+	bool IsHasAnimation() { return GetCurrentAnimation() != nullptr; }
 
 	// Setters
 	void SetName(string name) { this->name = name; }
@@ -100,12 +110,13 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
 	virtual void Render()
 	{
-		RenderBoundingBox();
+		RenderBoundingBox(x + width / 2, y + height / 2);
 
-		auto aniID = GetAnimationID();
-		auto matCustomTranformation = GetCustomTranformationMatrix();
-
-		CAnimations::GetInstance()->Get(aniID)->Render(x, y, matCustomTranformation);
+		// Has animation? Render it
+		if (IsHasAnimation()) {
+			auto matCustomTranformation = GetCustomTranformationMatrix();
+			GetCurrentAnimation()->Render(x + width/2, y + height/2, matCustomTranformation);
+		}
 	}
 
 	virtual void Delete() { isDeleted = true; }

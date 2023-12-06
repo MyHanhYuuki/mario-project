@@ -205,6 +205,7 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetWidth();
 	int GetHeight();
+	int GetAnimationID();
 
 	// Setters
 	void SetState(int state);
@@ -213,7 +214,6 @@ public:
 
 	// Logic
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void Render();
 
 	// Collision related
 	void OnNoCollision(DWORD dt);
