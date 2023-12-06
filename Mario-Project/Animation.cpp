@@ -1,4 +1,4 @@
-#include "Animation.h"
+﻿#include "Animation.h"
 #include "debug.h"
 
 void CAnimation::Add(int spriteId, DWORD time)
@@ -16,24 +16,36 @@ void CAnimation::Add(int spriteId, DWORD time)
 
 void CAnimation::Render(float x, float y, D3DXMATRIX* matCustomTranformation)
 {
+	GetCurrentAnimationFrame()->GetSprite()->Draw(x, y, matCustomTranformation);
+}
+
+/** Lấy vị trí khung hình hiện tại */
+int CAnimation::CalculateCurrentFrameIndex()
+{
 	ULONGLONG now = GetTickCount64();
-	if (currentFrame == -1)
+	if (currentFrameIndex == -1)
 	{
-		currentFrame = 0;
+		currentFrameIndex = 0;
 		lastFrameTime = now;
 	}
 	else
 	{
-		DWORD t = frames[currentFrame]->GetTime();
+		DWORD t = frames[currentFrameIndex]->GetTime();
 		if (now - lastFrameTime > t)
 		{
-			currentFrame++;
+			currentFrameIndex++;
 			lastFrameTime = now;
-			if (currentFrame == frames.size()) currentFrame = 0;
+			if (currentFrameIndex == frames.size()) currentFrameIndex = 0;
 		}
 
 	}
 
-	frames[currentFrame]->GetSprite()->Draw(x, y, matCustomTranformation);
+	return currentFrameIndex;
 }
 
+/* Lấy khung hình hiện tại*/
+LPANIMATION_FRAME CAnimation::GetCurrentAnimationFrame()
+{
+	int curentFrame = CalculateCurrentFrameIndex();
+	return frames[currentFrameIndex];
+}
