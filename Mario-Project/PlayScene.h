@@ -54,6 +54,7 @@ protected:
 	TileSet* LoadTileSet(TiXmlElement* root);
 	void ParseTile(TiXmlElement* layerElement);
 public: 
+	void Reload();
 	CPlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();

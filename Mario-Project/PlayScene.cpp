@@ -22,6 +22,12 @@
 
 using namespace std;
 
+/* Tải lại màn chơi */
+void CPlayScene::Reload() {
+	Unload();
+	Load();
+}
+
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 {
 	this->player = NULL;
