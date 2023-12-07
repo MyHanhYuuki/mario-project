@@ -455,9 +455,6 @@ void CPlayScene::Render()
 	}
 
 	// Vẽ theo chiều ngược lại vì Mario thuộc vị trí đầu tiên của objects, theo sau là các object và cuối cùng là map
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
-
 	for (int i = 0; i < this->objects.size(); i++)
 	{
 		if (objects[i]->IsDeleted() != true) {
