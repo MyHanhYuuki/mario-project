@@ -76,6 +76,13 @@ public:
 	}
 
 	// Getters
+	D3DXVECTOR2 GetCenterPointWithOffset()
+	{
+		float posX = x + width / 2 + GetOffsetX();
+		float posY = y + height / 2 + GetOffsetY();
+
+		return D3DXVECTOR2(posX, posY);
+	}
 	int GetState() { return this->state; }
 	bool IsDeleted() { return isDeleted; }
 	void GetCenterPoint(float &top, float &left) {
@@ -98,6 +105,8 @@ public:
 		return nullptr;
 	}
 	bool IsHasAnimation() { return GetCurrentAnimation() != nullptr; }
+	virtual int GetOffsetX() { return 0; }
+	virtual int GetOffsetY() { return 0; }
 
 	// Setters
 	void SetName(string name) { this->name = name; }
@@ -110,12 +119,13 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
 	virtual void Render()
 	{
-		RenderBoundingBox(x + width / 2, y + height / 2);
+		auto posCenter = GetCenterPointWithOffset();
+		RenderBoundingBox(posCenter.x, posCenter.y);
 
 		// Has animation? Render it
 		if (IsHasAnimation()) {
 			auto matCustomTranformation = GetCustomTranformationMatrix();
-			GetCurrentAnimation()->Render(x + width/2, y + height/2, matCustomTranformation);
+			GetCurrentAnimation()->Render(posCenter.x, posCenter.y, matCustomTranformation);
 		}
 	}
 

@@ -538,7 +538,6 @@ void CMario::SetState(int state)
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
 			vx = 0; vy = 0.0f;
-			y +=MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
 
@@ -547,7 +546,6 @@ void CMario::SetState(int state)
 		{
 			isSitting = false;
 			state = MARIO_STATE_IDLE;
-			y -= MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
 
@@ -618,6 +616,15 @@ int CMario::GetHeight()
 	}
 
 	return height;
+}
+
+int CMario::GetOffsetY() {
+	if (isSitting) {
+		return MARIO_BIG_OFFSET_Y_SITTING;
+	}
+	else {
+		return MARIO_BIG_OFFSET_Y_IDLE;
+	}
 }
 
 void CMario::SetLevel(int l)

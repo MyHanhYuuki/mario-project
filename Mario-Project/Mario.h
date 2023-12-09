@@ -125,12 +125,10 @@
 #define MARIO_BIG_BBOX_HEIGHT 24
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
-
-#define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
-
+#define MARIO_BIG_OFFSET_Y_SITTING 6
+#define MARIO_BIG_OFFSET_Y_IDLE 2
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
-
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 
@@ -206,6 +204,7 @@ public:
 	int GetWidth();
 	int GetHeight();
 	int GetAnimationID();
+	int GetOffsetY();
 
 	// Setters
 	void SetState(int state);
