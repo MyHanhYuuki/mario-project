@@ -110,6 +110,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CKoopa*>(e->obj)) {
 		OnCollisionWithKoopa(e);
 	}
+	else if (dynamic_cast<CFireBall*>(e->obj)) {
+		OnCollisionWithFireball(e);
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
